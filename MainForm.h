@@ -43,6 +43,13 @@ namespace Practice {
 	private: System::Windows::Forms::ToolStripMenuItem^ EnterToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ CreateToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ ExitToolStripMenuItem;
+	private: System::Windows::Forms::StatusStrip^ statusStrip1;
+	private: System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel_filename;
+	private: System::Windows::Forms::FolderBrowserDialog^ folderBrowserDialog1;
+
+
+
+
 
 
 	private:
@@ -63,7 +70,11 @@ namespace Practice {
 			this->CreateToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->ExitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->EnterToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->statusStrip1 = (gcnew System::Windows::Forms::StatusStrip());
+			this->toolStripStatusLabel_filename = (gcnew System::Windows::Forms::ToolStripStatusLabel());
+			this->folderBrowserDialog1 = (gcnew System::Windows::Forms::FolderBrowserDialog());
 			this->menustrip_main->SuspendLayout();
+			this->statusStrip1->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// menustrip_main
@@ -97,6 +108,7 @@ namespace Practice {
 			this->CreateToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::N));
 			this->CreateToolStripMenuItem->Size = System::Drawing::Size(315, 40);
 			this->CreateToolStripMenuItem->Text = L"Создать";
+			this->CreateToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::CreateToolStripMenuItem_Click);
 			// 
 			// ExitToolStripMenuItem
 			// 
@@ -114,11 +126,29 @@ namespace Practice {
 			this->EnterToolStripMenuItem->Size = System::Drawing::Size(76, 34);
 			this->EnterToolStripMenuItem->Text = L"Вход";
 			// 
+			// statusStrip1
+			// 
+			this->statusStrip1->ImageScalingSize = System::Drawing::Size(28, 28);
+			this->statusStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->toolStripStatusLabel_filename });
+			this->statusStrip1->Location = System::Drawing::Point(0, 748);
+			this->statusStrip1->Name = L"statusStrip1";
+			this->statusStrip1->Size = System::Drawing::Size(1295, 22);
+			this->statusStrip1->TabIndex = 1;
+			this->statusStrip1->Text = L"statusStrip1";
+			// 
+			// toolStripStatusLabel_filename
+			// 
+			this->toolStripStatusLabel_filename->Name = L"toolStripStatusLabel_filename";
+			this->toolStripStatusLabel_filename->Size = System::Drawing::Size(93, 30);
+			this->toolStripStatusLabel_filename->Text = L"filename";
+			this->toolStripStatusLabel_filename->Visible = false;
+			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(11, 24);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1295, 770);
+			this->Controls->Add(this->statusStrip1);
 			this->Controls->Add(this->menustrip_main);
 			this->MainMenuStrip = this->menustrip_main;
 			this->Name = L"MainForm";
@@ -127,6 +157,8 @@ namespace Practice {
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &MainForm::MainForm_FormClosing);
 			this->menustrip_main->ResumeLayout(false);
 			this->menustrip_main->PerformLayout();
+			this->statusStrip1->ResumeLayout(false);
+			this->statusStrip1->PerformLayout();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -143,6 +175,14 @@ namespace Practice {
 	}
 	private: System::Void ExitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->Close();
+	}
+	private: System::Void CreateToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (folderBrowserDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+		{
+			this->toolStripStatusLabel_filename->Text = L"Новый файл";
+			this->toolStripStatusLabel_filename->Visible = true;
+			//this->Text = saveFileDialog1->FileName;
+		}
 	}
 };
 }

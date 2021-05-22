@@ -1,6 +1,7 @@
 #include "MainForm.h"
 #include <Windows.h>
 using namespace Practice;
+[STAThread]
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
