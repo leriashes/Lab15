@@ -34,7 +34,9 @@ namespace Practice {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::Label^ label1;
+	private: System::Windows::Forms::Label^ label_hello;
+	protected:
+
 	private: System::Windows::Forms::Button^ button_open;
 	private: System::Windows::Forms::Button^ button_create;
 	private: System::Windows::Forms::Button^ button_exit;
@@ -54,22 +56,22 @@ namespace Practice {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->label_hello = (gcnew System::Windows::Forms::Label());
 			this->button_open = (gcnew System::Windows::Forms::Button());
 			this->button_create = (gcnew System::Windows::Forms::Button());
 			this->button_exit = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
-			// label1
+			// label_hello
 			// 
-			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(8, 10);
-			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(583, 100);
-			this->label1->TabIndex = 0;
-			this->label1->Text = L"Добро пожаловать в программу учёта товаров \r\nдля магазина игрушек!\r\n\r\nДля начала "
+			this->label_hello->AutoSize = true;
+			this->label_hello->Location = System::Drawing::Point(8, 10);
+			this->label_hello->Name = L"label_hello";
+			this->label_hello->Size = System::Drawing::Size(583, 100);
+			this->label_hello->TabIndex = 0;
+			this->label_hello->Text = L"Добро пожаловать в программу учёта товаров \r\nдля магазина игрушек!\r\n\r\nДля начала "
 				L"работы необходимо открыть или создать файл.\r\n";
-			this->label1->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			this->label_hello->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// button_open
 			// 
@@ -110,7 +112,7 @@ namespace Practice {
 			this->Controls->Add(this->button_exit);
 			this->Controls->Add(this->button_create);
 			this->Controls->Add(this->button_open);
-			this->Controls->Add(this->label1);
+			this->Controls->Add(this->label_hello);
 			this->MaximizeBox = false;
 			this->MinimizeBox = false;
 			this->Name = L"HelloForm";
