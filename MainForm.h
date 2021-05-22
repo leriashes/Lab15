@@ -1,4 +1,5 @@
 #pragma once
+#include "HelloForm.h"
 #include "ExitForm.h"
 
 namespace Practice {
@@ -93,7 +94,7 @@ namespace Practice {
 			});
 			this->menustrip_main->Location = System::Drawing::Point(0, 0);
 			this->menustrip_main->Name = L"menustrip_main";
-			this->menustrip_main->Size = System::Drawing::Size(1295, 38);
+			this->menustrip_main->Size = System::Drawing::Size(976, 38);
 			this->menustrip_main->TabIndex = 0;
 			this->menustrip_main->Text = L"menuStrip1";
 			// 
@@ -143,9 +144,9 @@ namespace Practice {
 			// 
 			this->statusStrip1->ImageScalingSize = System::Drawing::Size(28, 28);
 			this->statusStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->toolStripStatusLabel_filename });
-			this->statusStrip1->Location = System::Drawing::Point(0, 748);
+			this->statusStrip1->Location = System::Drawing::Point(0, 514);
 			this->statusStrip1->Name = L"statusStrip1";
-			this->statusStrip1->Size = System::Drawing::Size(1295, 22);
+			this->statusStrip1->Size = System::Drawing::Size(976, 22);
 			this->statusStrip1->TabIndex = 1;
 			this->statusStrip1->Text = L"statusStrip1";
 			// 
@@ -164,14 +165,16 @@ namespace Practice {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(11, 24);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1295, 770);
+			this->ClientSize = System::Drawing::Size(976, 536);
 			this->Controls->Add(this->statusStrip1);
 			this->Controls->Add(this->menustrip_main);
 			this->MainMenuStrip = this->menustrip_main;
+			this->MinimumSize = System::Drawing::Size(1000, 125);
 			this->Name = L"MainForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Магазин игрушек";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &MainForm::MainForm_FormClosing);
+			this->Load += gcnew System::EventHandler(this, &MainForm::MainForm_Load);
 			this->menustrip_main->ResumeLayout(false);
 			this->menustrip_main->PerformLayout();
 			this->statusStrip1->ResumeLayout(false);
@@ -198,7 +201,6 @@ namespace Practice {
 		{
 			this->toolStripStatusLabel_filename->Text = L"Новый файл";
 			this->toolStripStatusLabel_filename->Visible = true;
-			//this->Text = saveFileDialog1->FileName;
 		}
 	}
 	private: System::Void OpenToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -206,6 +208,33 @@ namespace Practice {
 		{
 			this->toolStripStatusLabel_filename->Text = openFileDialog1->FileName;
 			this->toolStripStatusLabel_filename->Visible = true;
+		}
+	}
+	private: System::Void MainForm_Load(System::Object^ sender, System::EventArgs^ e) {
+		this->Show();
+		HelloForm^ p = gcnew HelloForm();
+		p->ShowDialog();
+		if (p->DialogResult == System::Windows::Forms::DialogResult::Cancel)
+			this->Close();
+		else if (p->DialogResult == System::Windows::Forms::DialogResult::No)
+		{
+			if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+			{
+				this->toolStripStatusLabel_filename->Text = openFileDialog1->FileName;
+				this->toolStripStatusLabel_filename->Visible = true;
+			}
+			else
+				MainForm_Load(sender, e);
+		}
+		else if (p->DialogResult == System::Windows::Forms::DialogResult::Yes)
+		{
+			if (folderBrowserDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+			{
+				this->toolStripStatusLabel_filename->Text = L"Новый файл";
+				this->toolStripStatusLabel_filename->Visible = true;
+			}
+			else
+				MainForm_Load(sender, e);
 		}
 	}
 };

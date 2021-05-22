@@ -21,6 +21,9 @@
     <ClCompile Include="ExitForm.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="HelloForm.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainForm.h">
@@ -28,6 +31,9 @@
     </ClInclude>
     <ClInclude Include="ExitForm.h">
       <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="HelloForm.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

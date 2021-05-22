@@ -119,10 +119,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ExitForm.cpp" />
+    <ClCompile Include="HelloForm.cpp" />
     <ClCompile Include="MainForm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExitForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="HelloForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="MainForm.h">
@@ -132,6 +136,9 @@
   <ItemGroup>
     <EmbeddedResource Include="ExitForm.resx">
       <DependentUpon>ExitForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HelloForm.resx">
+      <DependentUpon>HelloForm.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.h</DependentUpon>
