@@ -46,6 +46,9 @@ namespace Practice {
 	private: System::Windows::Forms::StatusStrip^ statusStrip1;
 	private: System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel_filename;
 	private: System::Windows::Forms::FolderBrowserDialog^ folderBrowserDialog1;
+	private: System::Windows::Forms::ToolStripMenuItem^ OpenToolStripMenuItem;
+	private: System::Windows::Forms::OpenFileDialog^ openFileDialog1;
+
 
 
 
@@ -68,11 +71,13 @@ namespace Practice {
 			this->menustrip_main = (gcnew System::Windows::Forms::MenuStrip());
 			this->FileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->CreateToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->OpenToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->ExitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->EnterToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->statusStrip1 = (gcnew System::Windows::Forms::StatusStrip());
 			this->toolStripStatusLabel_filename = (gcnew System::Windows::Forms::ToolStripStatusLabel());
 			this->folderBrowserDialog1 = (gcnew System::Windows::Forms::FolderBrowserDialog());
+			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->menustrip_main->SuspendLayout();
 			this->statusStrip1->SuspendLayout();
 			this->SuspendLayout();
@@ -94,9 +99,9 @@ namespace Practice {
 			// 
 			// FileToolStripMenuItem
 			// 
-			this->FileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+			this->FileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
 				this->CreateToolStripMenuItem,
-					this->ExitToolStripMenuItem
+					this->OpenToolStripMenuItem, this->ExitToolStripMenuItem
 			});
 			this->FileToolStripMenuItem->Name = L"FileToolStripMenuItem";
 			this->FileToolStripMenuItem->Size = System::Drawing::Size(80, 34);
@@ -106,15 +111,23 @@ namespace Practice {
 			// 
 			this->CreateToolStripMenuItem->Name = L"CreateToolStripMenuItem";
 			this->CreateToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::N));
-			this->CreateToolStripMenuItem->Size = System::Drawing::Size(315, 40);
+			this->CreateToolStripMenuItem->Size = System::Drawing::Size(288, 40);
 			this->CreateToolStripMenuItem->Text = L"Создать";
 			this->CreateToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::CreateToolStripMenuItem_Click);
+			// 
+			// OpenToolStripMenuItem
+			// 
+			this->OpenToolStripMenuItem->Name = L"OpenToolStripMenuItem";
+			this->OpenToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::O));
+			this->OpenToolStripMenuItem->Size = System::Drawing::Size(288, 40);
+			this->OpenToolStripMenuItem->Text = L"Открыть";
+			this->OpenToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::OpenToolStripMenuItem_Click);
 			// 
 			// ExitToolStripMenuItem
 			// 
 			this->ExitToolStripMenuItem->Name = L"ExitToolStripMenuItem";
 			this->ExitToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Alt | System::Windows::Forms::Keys::F4));
-			this->ExitToolStripMenuItem->Size = System::Drawing::Size(315, 40);
+			this->ExitToolStripMenuItem->Size = System::Drawing::Size(288, 40);
 			this->ExitToolStripMenuItem->Text = L"Выход";
 			this->ExitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::ExitToolStripMenuItem_Click);
 			// 
@@ -142,6 +155,10 @@ namespace Practice {
 			this->toolStripStatusLabel_filename->Size = System::Drawing::Size(93, 30);
 			this->toolStripStatusLabel_filename->Text = L"filename";
 			this->toolStripStatusLabel_filename->Visible = false;
+			// 
+			// openFileDialog1
+			// 
+			this->openFileDialog1->Filter = L"Текстовые файлы(*.txt)|*.txt";
 			// 
 			// MainForm
 			// 
@@ -182,6 +199,13 @@ namespace Practice {
 			this->toolStripStatusLabel_filename->Text = L"Новый файл";
 			this->toolStripStatusLabel_filename->Visible = true;
 			//this->Text = saveFileDialog1->FileName;
+		}
+	}
+	private: System::Void OpenToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+		{
+			this->toolStripStatusLabel_filename->Text = openFileDialog1->FileName;
+			this->toolStripStatusLabel_filename->Visible = true;
 		}
 	}
 };
