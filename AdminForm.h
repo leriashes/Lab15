@@ -129,11 +129,11 @@ namespace Practice {
 		}
 #pragma endregion
 	private: System::Void button_ready_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (this->textBox1->Text == "Lera")
+		if (this->textBox1->Text == "Igra")
 			parol = true;
 		else
 		{
-			parol = false;
+			parol = false; 
 			this->label1->Visible = true;
 			this->textBox1->Text = "";
 		}

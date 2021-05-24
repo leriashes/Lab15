@@ -114,6 +114,7 @@ namespace Practice {
 			this->QueryToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->GameToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->InfoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->QuitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->statusStrip1 = (gcnew System::Windows::Forms::StatusStrip());
 			this->toolStripStatusLabel_filename = (gcnew System::Windows::Forms::ToolStripStatusLabel());
 			this->folderBrowserDialog1 = (gcnew System::Windows::Forms::FolderBrowserDialog());
@@ -125,7 +126,6 @@ namespace Practice {
 			this->Column_cost = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Column_age = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->label_center = (gcnew System::Windows::Forms::Label());
-			this->QuitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->menustrip_main->SuspendLayout();
 			this->statusStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
@@ -163,7 +163,7 @@ namespace Practice {
 			this->CreateToolStripMenuItem->Enabled = false;
 			this->CreateToolStripMenuItem->Name = L"CreateToolStripMenuItem";
 			this->CreateToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::N));
-			this->CreateToolStripMenuItem->Size = System::Drawing::Size(315, 40);
+			this->CreateToolStripMenuItem->Size = System::Drawing::Size(303, 40);
 			this->CreateToolStripMenuItem->Text = L"&Создать";
 			this->CreateToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::CreateToolStripMenuItem_Click);
 			// 
@@ -171,40 +171,40 @@ namespace Practice {
 			// 
 			this->OpenToolStripMenuItem->Name = L"OpenToolStripMenuItem";
 			this->OpenToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::O));
-			this->OpenToolStripMenuItem->Size = System::Drawing::Size(315, 40);
+			this->OpenToolStripMenuItem->Size = System::Drawing::Size(303, 40);
 			this->OpenToolStripMenuItem->Text = L"&Открыть";
 			this->OpenToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::OpenToolStripMenuItem_Click);
 			// 
 			// SepToolStripMenuItem1
 			// 
 			this->SepToolStripMenuItem1->Name = L"SepToolStripMenuItem1";
-			this->SepToolStripMenuItem1->Size = System::Drawing::Size(312, 6);
+			this->SepToolStripMenuItem1->Size = System::Drawing::Size(300, 6);
 			// 
 			// SaveToolStripMenuItem
 			// 
 			this->SaveToolStripMenuItem->Enabled = false;
 			this->SaveToolStripMenuItem->Name = L"SaveToolStripMenuItem";
 			this->SaveToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::S));
-			this->SaveToolStripMenuItem->Size = System::Drawing::Size(315, 40);
+			this->SaveToolStripMenuItem->Size = System::Drawing::Size(303, 40);
 			this->SaveToolStripMenuItem->Text = L"Со&хранить";
 			// 
 			// SaveAsToolStripMenuItem
 			// 
 			this->SaveAsToolStripMenuItem->Enabled = false;
 			this->SaveAsToolStripMenuItem->Name = L"SaveAsToolStripMenuItem";
-			this->SaveAsToolStripMenuItem->Size = System::Drawing::Size(315, 40);
+			this->SaveAsToolStripMenuItem->Size = System::Drawing::Size(303, 40);
 			this->SaveAsToolStripMenuItem->Text = L"Сох&ранить как...";
 			// 
 			// SepToolStripMenuItem2
 			// 
 			this->SepToolStripMenuItem2->Name = L"SepToolStripMenuItem2";
-			this->SepToolStripMenuItem2->Size = System::Drawing::Size(312, 6);
+			this->SepToolStripMenuItem2->Size = System::Drawing::Size(300, 6);
 			// 
 			// ExitToolStripMenuItem
 			// 
 			this->ExitToolStripMenuItem->Name = L"ExitToolStripMenuItem";
 			this->ExitToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Alt | System::Windows::Forms::Keys::F4));
-			this->ExitToolStripMenuItem->Size = System::Drawing::Size(315, 40);
+			this->ExitToolStripMenuItem->Size = System::Drawing::Size(303, 40);
 			this->ExitToolStripMenuItem->Text = L"&Выход";
 			this->ExitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::ExitToolStripMenuItem_Click);
 			// 
@@ -242,6 +242,15 @@ namespace Practice {
 			this->InfoToolStripMenuItem->Name = L"InfoToolStripMenuItem";
 			this->InfoToolStripMenuItem->Size = System::Drawing::Size(111, 34);
 			this->InfoToolStripMenuItem->Text = L"&Справка";
+			// 
+			// QuitToolStripMenuItem
+			// 
+			this->QuitToolStripMenuItem->Alignment = System::Windows::Forms::ToolStripItemAlignment::Right;
+			this->QuitToolStripMenuItem->Name = L"QuitToolStripMenuItem";
+			this->QuitToolStripMenuItem->Size = System::Drawing::Size(366, 34);
+			this->QuitToolStripMenuItem->Text = L"Выход из режима администратора";
+			this->QuitToolStripMenuItem->Visible = false;
+			this->QuitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::QuitToolStripMenuItem_Click);
 			// 
 			// statusStrip1
 			// 
@@ -338,14 +347,6 @@ namespace Practice {
 			this->label_center->TabIndex = 3;
 			this->label_center->Text = L"Файл не выбран";
 			this->label_center->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
-			// 
-			// QuitToolStripMenuItem
-			// 
-			this->QuitToolStripMenuItem->Alignment = System::Windows::Forms::ToolStripItemAlignment::Right;
-			this->QuitToolStripMenuItem->Name = L"QuitToolStripMenuItem";
-			this->QuitToolStripMenuItem->Size = System::Drawing::Size(366, 34);
-			this->QuitToolStripMenuItem->Text = L"Выход из режима администратора";
-			this->QuitToolStripMenuItem->Visible = false;
 			// 
 			// MainForm
 			// 
@@ -466,7 +467,21 @@ namespace Practice {
 		{
 			this->QuitToolStripMenuItem->Visible = true;
 			this->EnterToolStripMenuItem->Visible = false;
+			this->dataGridView1->BackgroundColor = System::Drawing::Color::LightPink;
+			this->CreateToolStripMenuItem->Enabled = true;
+			this->SaveToolStripMenuItem->Enabled = true;
+			this->SaveAsToolStripMenuItem->Enabled = true;
+			this->CorrectToolStripMenuItem->Enabled = true;
 		}
+	}
+	private: System::Void QuitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		this->QuitToolStripMenuItem->Visible = false;
+		this->EnterToolStripMenuItem->Visible = true;
+		this->dataGridView1->BackgroundColor = System::Drawing::Color::Honeydew;
+		this->CreateToolStripMenuItem->Enabled = false;
+		this->SaveToolStripMenuItem->Enabled = false;
+		this->SaveAsToolStripMenuItem->Enabled = false;
+		this->CorrectToolStripMenuItem->Enabled = false;
 	}
 };
 }
