@@ -1,6 +1,7 @@
 #pragma once
 #include "HelloForm.h"
 #include "ExitForm.h"
+#include "AdminForm.h"
 
 namespace Practice {
 
@@ -128,11 +129,12 @@ namespace Practice {
 					this->OpenToolStripMenuItem, this->SaveToolStripMenuItem, this->SaveAsToolStripMenuItem, this->ExitToolStripMenuItem
 			});
 			this->FileToolStripMenuItem->Name = L"FileToolStripMenuItem";
-			this->FileToolStripMenuItem->Size = System::Drawing::Size(80, 38);
+			this->FileToolStripMenuItem->Size = System::Drawing::Size(80, 34);
 			this->FileToolStripMenuItem->Text = L"&Файл";
 			// 
 			// CreateToolStripMenuItem
 			// 
+			this->CreateToolStripMenuItem->Enabled = false;
 			this->CreateToolStripMenuItem->Name = L"CreateToolStripMenuItem";
 			this->CreateToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::N));
 			this->CreateToolStripMenuItem->Size = System::Drawing::Size(303, 40);
@@ -149,6 +151,7 @@ namespace Practice {
 			// 
 			// SaveToolStripMenuItem
 			// 
+			this->SaveToolStripMenuItem->Enabled = false;
 			this->SaveToolStripMenuItem->Name = L"SaveToolStripMenuItem";
 			this->SaveToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::S));
 			this->SaveToolStripMenuItem->Size = System::Drawing::Size(303, 40);
@@ -156,6 +159,7 @@ namespace Practice {
 			// 
 			// SaveAsToolStripMenuItem
 			// 
+			this->SaveAsToolStripMenuItem->Enabled = false;
 			this->SaveAsToolStripMenuItem->Name = L"SaveAsToolStripMenuItem";
 			this->SaveAsToolStripMenuItem->Size = System::Drawing::Size(303, 40);
 			this->SaveAsToolStripMenuItem->Text = L"Сохранить как...";
@@ -173,8 +177,9 @@ namespace Practice {
 			this->EnterToolStripMenuItem->Alignment = System::Windows::Forms::ToolStripItemAlignment::Right;
 			this->EnterToolStripMenuItem->Name = L"EnterToolStripMenuItem";
 			this->EnterToolStripMenuItem->RightToLeft = System::Windows::Forms::RightToLeft::No;
-			this->EnterToolStripMenuItem->Size = System::Drawing::Size(76, 38);
+			this->EnterToolStripMenuItem->Size = System::Drawing::Size(76, 34);
 			this->EnterToolStripMenuItem->Text = L"Вход";
+			this->EnterToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::EnterToolStripMenuItem_Click);
 			// 
 			// statusStrip1
 			// 
@@ -298,7 +303,7 @@ namespace Practice {
 #pragma endregion
 	//Закрытие формы
 	private: System::Void MainForm_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
-		if (this->toolStripStatusLabel_filename->Visible == true)
+		if (this->toolStripStatusLabel_filename->Visible == true && this->EnterToolStripMenuItem->Visible == false)
 		{
 			e->Cancel = true;
 			ExitForm^ p = gcnew ExitForm();
@@ -346,9 +351,10 @@ namespace Practice {
 		}
 		else if (p->DialogResult == System::Windows::Forms::DialogResult::Yes)
 		{
-			CreateToolStripMenuItem_Click(sender, e);
+			EnterToolStripMenuItem_Click(sender, e);
+			/*CreateToolStripMenuItem_Click(sender, e);
 			if (this->toolStripStatusLabel_filename->Visible != true)
-				MainForm_Load(sender, e);
+				MainForm_Load(sender, e);*/
 		}
 	}
 	private: System::Void toolStripStatusLabel_filename_TextChanged(System::Object^ sender, System::EventArgs^ e) {
@@ -382,6 +388,10 @@ namespace Practice {
 			this->label_center->Visible = true;
 			this->label_center->Text = L"Файл не выбран";
 		}
+	}
+	private: System::Void EnterToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		AdminForm^ p = gcnew AdminForm();
+		p->ShowDialog();
 	}
 };
 }
