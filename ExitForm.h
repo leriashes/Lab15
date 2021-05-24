@@ -113,6 +113,8 @@ namespace Practice {
 			this->MinimizeBox = false;
 			this->MinimumSize = System::Drawing::Size(624, 200);
 			this->Name = L"ExitForm";
+			this->ShowInTaskbar = false;
+			this->SizeGripStyle = System::Windows::Forms::SizeGripStyle::Hide;
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->ResumeLayout(false);
 			this->PerformLayout();
