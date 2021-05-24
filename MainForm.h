@@ -462,6 +462,11 @@ namespace Practice {
 	private: System::Void EnterToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		AdminForm^ p = gcnew AdminForm();
 		p->ShowDialog();
+		if (p->parol == true)
+		{
+			this->QuitToolStripMenuItem->Visible = true;
+			this->EnterToolStripMenuItem->Visible = false;
+		}
 	}
 };
 }
