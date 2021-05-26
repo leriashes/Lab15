@@ -239,13 +239,13 @@ namespace Practice {
 			// AddRowToolStripMenuItem
 			// 
 			this->AddRowToolStripMenuItem->Name = L"AddRowToolStripMenuItem";
-			this->AddRowToolStripMenuItem->Size = System::Drawing::Size(315, 40);
+			this->AddRowToolStripMenuItem->Size = System::Drawing::Size(293, 40);
 			this->AddRowToolStripMenuItem->Text = L"Добавить строку";
 			// 
 			// DelRowToolStripMenuItem
 			// 
 			this->DelRowToolStripMenuItem->Name = L"DelRowToolStripMenuItem";
-			this->DelRowToolStripMenuItem->Size = System::Drawing::Size(315, 40);
+			this->DelRowToolStripMenuItem->Size = System::Drawing::Size(293, 40);
 			this->DelRowToolStripMenuItem->Text = L"Удалить строку";
 			// 
 			// QueryToolStripMenuItem
@@ -322,6 +322,7 @@ namespace Practice {
 			this->dataGridView1->Size = System::Drawing::Size(1500, 898);
 			this->dataGridView1->TabIndex = 2;
 			this->dataGridView1->Visible = false;
+			this->dataGridView1->SortCompare += gcnew System::Windows::Forms::DataGridViewSortCompareEventHandler(this, &MainForm::dataGridView1_SortCompare);
 			// 
 			// Column_name
 			// 
@@ -542,14 +543,13 @@ namespace Practice {
 									}
 
 									if (good) {
-										/*String^ str = Convert::ToString(Convert::ToDouble(splittedstr[3]));
+										String^ str = Convert::ToString(Convert::ToDouble(splittedstr[3]));
 
 										if (str->Length > 2 && str[str->Length - 2] == ',')
 											str += "0";
 										else if (str->Length < 3 || str[str->Length - 3] != ',')
 											str += ",00";
-										row->Cells[3]->Value = str;*/
-										row->Cells[3]->Value = Convert::ToDouble(splittedstr[3]);
+										row->Cells[3]->Value = str;
 
 										//Проверка пятого столбца
 										for (int i = 0, p = 0; i < splittedstr[4]->Length - 1; i++) {
@@ -571,7 +571,8 @@ namespace Practice {
 													age += splittedstr[4][i];
 											else
 												age = splittedstr[4];
-											row->Cells[4]->Value = Convert::ToInt64(age);
+
+											row->Cells[4]->Value = Convert::ToString(Convert::ToInt64(age)) + "+";
 										}
 									}
 								}
@@ -640,6 +641,51 @@ namespace Practice {
 			this->SaveAsToolStripMenuItem->Enabled = false;
 			this->CorrectToolStripMenuItem->Enabled = false;
 		}
+	}
+	private: System::Void dataGridView1_SortCompare(System::Object^ sender, System::Windows::Forms::DataGridViewSortCompareEventArgs^ e) {
+		if (e->Column->Name == "Column_number") {
+			Int64 v1, v2;
+			v1 = Convert::ToInt64(e->CellValue1);
+			v2 = Convert::ToInt64(e->CellValue2);
+			if (v1 > v2)
+				e->SortResult = 1;
+			else if (v1 < v2)
+				e->SortResult = -1;
+			else
+				e->SortResult = 0;
+		}
+		else if (e->Column->Name == "Column_cost") {
+			double v1, v2;
+			v1 = Convert::ToDouble(e->CellValue1);
+			v2 = Convert::ToDouble(e->CellValue2);
+			if (v1 > v2)
+				e->SortResult = 1;
+			else if (v1 < v2)
+				e->SortResult = -1;
+			else
+				e->SortResult = 0;
+		}
+		else if (e->Column->Name == "Column_age") {
+			Int64 v1, v2;
+			String^ va1,^ va2;
+			for (int i = 0; i < e->CellValue1->ToString()->Length - 1; i++)
+				va1 += e->CellValue1->ToString()[i];
+			for (int i = 0; i < e->CellValue2->ToString()->Length - 1; i++)
+				va2 += e->CellValue2->ToString()[i];
+			v1 = Convert::ToInt64(va1);
+			v2 = Convert::ToInt64(va2);
+			if (v1 > v2)
+				e->SortResult = 1;
+			else if (v1 < v2)
+				e->SortResult = -1;
+			else
+				e->SortResult = 0;
+		}
+		else
+			e->SortResult = System::String::Compare(
+				e->CellValue1->ToString(), e->CellValue2->ToString());
+		e->Handled = true;
+		
 	}
 };
 }
