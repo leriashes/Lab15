@@ -12,6 +12,7 @@ namespace Practice {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::IO;
 
 	/// <summary>
 	/// Сводка для MainForm
@@ -214,6 +215,7 @@ namespace Practice {
 			this->SaveToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::S));
 			this->SaveToolStripMenuItem->Size = System::Drawing::Size(315, 40);
 			this->SaveToolStripMenuItem->Text = L"Со&хранить";
+			this->SaveToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::SaveToolStripMenuItem_Click);
 			// 
 			// SaveAsToolStripMenuItem
 			// 
@@ -490,7 +492,7 @@ namespace Practice {
 		dataGridView1->Rows->Clear();
 
 		if (this->toolStripStatusLabel_filename->Text != L"Новый файл") {
-			array<String^>^ lines = System::IO::File::ReadAllLines(this->toolStripStatusLabel_filename->Text, System::Text::Encoding::GetEncoding(1251));
+			array<String^>^ lines = File::ReadAllLines(this->toolStripStatusLabel_filename->Text, System::Text::Encoding::GetEncoding(1251));
 			if (lines->Length == 0 && !this->QuitToolStripMenuItem->Visible) {
 				good = false;
 				this->dataGridView1->Visible = false;
@@ -726,6 +728,17 @@ namespace Practice {
 	}
 	private: System::Void CloseToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->toolStripStatusLabel_filename->Visible = false;
+	}
+	private: System::Void SaveToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		StreamWriter^ sw = gcnew StreamWriter(this->toolStripStatusLabel_filename->Text, false, System::Text::Encoding::GetEncoding(1251));
+		for (int i = 0; i < this->dataGridView1->Rows->Count - 1; i++)
+		{
+			String^ str = this->dataGridView1->Rows[i]->Cells[0]->Value->ToString();
+			for (int j = 1; j < 5; j++)
+				str += ";" + this->dataGridView1->Rows[i]->Cells[j]->Value;
+			sw->WriteLine(str);
+		}
+		sw->Close();
 	}
 };
 }
