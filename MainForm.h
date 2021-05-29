@@ -644,13 +644,18 @@ namespace Practice {
 
 				//Если содержимое файла не удовлетворяет нужному формату
 				if (!good) {
-					String^ message = L"Are you sure that you would like to close the form?";
-					String^ caption = L"Form Closing";
-					MessageBox::Show(message, caption,
-						MessageBoxButtons::YesNo,
-						MessageBoxIcon::Question);
+					this->toolStripStatusLabel_filename->Visible = false;
+					if (this->EnterToolStripMenuItem->Visible)
+						MessageBox::Show(L"Содержимое файла не удовлетворяет формату.");
+					else {
+						if (MessageBox::Show(L"Содержимое файла не удовлетворяет формату. Очистить файл?", "", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes) {
+							this->toolStripStatusLabel_filename->Visible = true;
+							good = true;
+							StreamWriter^ sw = gcnew StreamWriter(this->toolStripStatusLabel_filename->Text, false, System::Text::Encoding::GetEncoding(1251));
+							sw->Close();
+						}
+					}
 				}
-					//this->dataGridView1->BackgroundColor = System::Drawing::Color::YellowGreen;
 			}
 		}
 		else {
