@@ -76,6 +76,7 @@ namespace Practice {
 	private: System::Windows::Forms::ToolStripMenuItem^ DelRowToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripSeparator^ toolStripSeparator1;
 	private: System::Windows::Forms::ToolStripMenuItem^ CloseToolStripMenuItem;
+	private: System::Windows::Forms::SaveFileDialog^ saveFileDialog1;
 
 
 
@@ -141,6 +142,7 @@ namespace Practice {
 			this->Column_cost = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Column_age = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->label_center = (gcnew System::Windows::Forms::Label());
+			this->saveFileDialog1 = (gcnew System::Windows::Forms::SaveFileDialog());
 			this->menustrip_main->SuspendLayout();
 			this->statusStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
@@ -178,7 +180,7 @@ namespace Practice {
 			this->CreateToolStripMenuItem->Enabled = false;
 			this->CreateToolStripMenuItem->Name = L"CreateToolStripMenuItem";
 			this->CreateToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::N));
-			this->CreateToolStripMenuItem->Size = System::Drawing::Size(315, 40);
+			this->CreateToolStripMenuItem->Size = System::Drawing::Size(303, 40);
 			this->CreateToolStripMenuItem->Text = L"&Создать";
 			this->CreateToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::CreateToolStripMenuItem_Click);
 			// 
@@ -186,34 +188,34 @@ namespace Practice {
 			// 
 			this->OpenToolStripMenuItem->Name = L"OpenToolStripMenuItem";
 			this->OpenToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::O));
-			this->OpenToolStripMenuItem->Size = System::Drawing::Size(315, 40);
+			this->OpenToolStripMenuItem->Size = System::Drawing::Size(303, 40);
 			this->OpenToolStripMenuItem->Text = L"&Открыть";
 			this->OpenToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::OpenToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator1
 			// 
 			this->toolStripSeparator1->Name = L"toolStripSeparator1";
-			this->toolStripSeparator1->Size = System::Drawing::Size(312, 6);
+			this->toolStripSeparator1->Size = System::Drawing::Size(300, 6);
 			// 
 			// CloseToolStripMenuItem
 			// 
 			this->CloseToolStripMenuItem->Enabled = false;
 			this->CloseToolStripMenuItem->Name = L"CloseToolStripMenuItem";
-			this->CloseToolStripMenuItem->Size = System::Drawing::Size(315, 40);
+			this->CloseToolStripMenuItem->Size = System::Drawing::Size(303, 40);
 			this->CloseToolStripMenuItem->Text = L"&Закрыть";
 			this->CloseToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::CloseToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator2
 			// 
 			this->toolStripSeparator2->Name = L"toolStripSeparator2";
-			this->toolStripSeparator2->Size = System::Drawing::Size(312, 6);
+			this->toolStripSeparator2->Size = System::Drawing::Size(300, 6);
 			// 
 			// SaveToolStripMenuItem
 			// 
 			this->SaveToolStripMenuItem->Enabled = false;
 			this->SaveToolStripMenuItem->Name = L"SaveToolStripMenuItem";
 			this->SaveToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::S));
-			this->SaveToolStripMenuItem->Size = System::Drawing::Size(315, 40);
+			this->SaveToolStripMenuItem->Size = System::Drawing::Size(303, 40);
 			this->SaveToolStripMenuItem->Text = L"Со&хранить";
 			this->SaveToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::SaveToolStripMenuItem_Click);
 			// 
@@ -221,19 +223,20 @@ namespace Practice {
 			// 
 			this->SaveAsToolStripMenuItem->Enabled = false;
 			this->SaveAsToolStripMenuItem->Name = L"SaveAsToolStripMenuItem";
-			this->SaveAsToolStripMenuItem->Size = System::Drawing::Size(315, 40);
+			this->SaveAsToolStripMenuItem->Size = System::Drawing::Size(303, 40);
 			this->SaveAsToolStripMenuItem->Text = L"Сох&ранить как...";
+			this->SaveAsToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::SaveAsToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator3
 			// 
 			this->toolStripSeparator3->Name = L"toolStripSeparator3";
-			this->toolStripSeparator3->Size = System::Drawing::Size(312, 6);
+			this->toolStripSeparator3->Size = System::Drawing::Size(300, 6);
 			// 
 			// ExitToolStripMenuItem
 			// 
 			this->ExitToolStripMenuItem->Name = L"ExitToolStripMenuItem";
 			this->ExitToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Alt | System::Windows::Forms::Keys::F4));
-			this->ExitToolStripMenuItem->Size = System::Drawing::Size(315, 40);
+			this->ExitToolStripMenuItem->Size = System::Drawing::Size(303, 40);
 			this->ExitToolStripMenuItem->Text = L"&Выход";
 			this->ExitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::ExitToolStripMenuItem_Click);
 			// 
@@ -394,6 +397,10 @@ namespace Practice {
 			this->label_center->Text = L"Файл не выбран";
 			this->label_center->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
+			// saveFileDialog1
+			// 
+			this->saveFileDialog1->Filter = L"Текстовые файлы(*.txt)|*.txt";
+			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(11, 24);
@@ -455,12 +462,22 @@ namespace Practice {
 
 	//Закрытие формы
 	private: System::Void MainForm_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
-		if (this->toolStripStatusLabel_filename->Visible == true && this->EnterToolStripMenuItem->Visible == false) {
+		//Если выполенен вход в режим администратора и открыт файл
+		if (this->toolStripStatusLabel_filename->Visible && this->QuitToolStripMenuItem->Visible) {
 			e->Cancel = true;
 			ExitForm^ p = gcnew ExitForm();
 			p->ShowDialog();
 			if (p->DialogResult == System::Windows::Forms::DialogResult::No)
 				e->Cancel = false;
+			//Сохранение изменений
+			else if (p->DialogResult == System::Windows::Forms::DialogResult::Yes) {
+				if (this->toolStripStatusLabel_filename->Visible) {
+					if (this->toolStripStatusLabel_filename->Text == L"Новый файл")
+						SaveAsToolStripMenuItem_Click(sender, e);
+					else
+						SaveToolStripMenuItem_Click(sender, e);
+				}
+			}
 		}
 	}
 
@@ -471,40 +488,42 @@ namespace Practice {
 
 	//Создание файла
 	private: System::Void CreateToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (folderBrowserDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
-			this->toolStripStatusLabel_filename->Text = L"Новый файл";
+		this->toolStripStatusLabel_filename->Text = L"Новый файл";
+		this->toolStripStatusLabel_filename->Visible = true;
+		open_file();
+	}
+
+	//Открытие файла
+	private: System::Void OpenToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (this->openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+			this->toolStripStatusLabel_filename->Text = this->openFileDialog1->FileName;
 			this->toolStripStatusLabel_filename->Visible = true;
 			open_file();
 		}
 	}
 
 	//Открытие файла
-	private: System::Void OpenToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
-			this->toolStripStatusLabel_filename->Text = openFileDialog1->FileName;
-			this->toolStripStatusLabel_filename->Visible = true;
-			open_file();
-		}
-	}
-
 	private: Void open_file() {
 		Boolean good = true;
-		dataGridView1->Rows->Clear();
+		this->dataGridView1->Rows->Clear();
 
 		if (this->toolStripStatusLabel_filename->Text != L"Новый файл") {
 			array<String^>^ lines = File::ReadAllLines(this->toolStripStatusLabel_filename->Text, System::Text::Encoding::GetEncoding(1251));
+			//Если файл пуст
 			if (lines->Length == 0 && !this->QuitToolStripMenuItem->Visible) {
 				good = false;
 				this->dataGridView1->Visible = false;
 				this->label_center->Visible = true;
 				this->label_center->Text = L"Файл пуст";
 			}
+			//Если файл не пустой
 			else {
 				for each (String ^ str in lines) {
 					DataGridViewRow^ row = gcnew DataGridViewRow();
-					row->CreateCells(dataGridView1);
+					row->CreateCells(this->dataGridView1);
 					array<String^>^ splittedstr = str->Split(L';');
 
+					//Если количество пунктов в строке не удовлетворяет нужному количеству
 					if (splittedstr->Length != 5) {
 						good = false;
 						break;
@@ -534,8 +553,8 @@ namespace Practice {
 									break;
 								}
 
-							for (int i = 0; i < dataGridView1->Rows->Count; i++)
-								if (dataGridView1->Rows[i]->Cells[1] == row->Cells[1]) {
+							for (int i = 0; i < this->dataGridView1->Rows->Count; i++)
+								if (this->dataGridView1->Rows[i]->Cells[1] == row->Cells[1]) {
 									good = false;
 									break;
 								}
@@ -568,13 +587,13 @@ namespace Practice {
 									}
 
 									if (good) {
-										String^ str = Convert::ToString(Convert::ToDouble(splittedstr[3]));
+										String^ stroka = Convert::ToString(Convert::ToDouble(splittedstr[3]));
 
-										if (str->Length > 2 && str[str->Length - 2] == ',')
-											str += "0";
-										else if (str->Length < 3 || str[str->Length - 3] != ',')
-											str += ",00";
-										row->Cells[3]->Value = str;
+										if (stroka->Length > 2 && stroka[stroka->Length - 2] == ',')
+											stroka += "0";
+										else if (stroka->Length < 3 || stroka[stroka->Length - 3] != ',')
+											stroka += ",00";
+										row->Cells[3]->Value = stroka;
 
 										//Проверка пятого столбца
 										for (int i = 0, p = 0; i < splittedstr[4]->Length - 1; i++) {
@@ -606,19 +625,27 @@ namespace Practice {
 						else
 							break;
 
-						dataGridView1->Rows->Add(row);
+						this->dataGridView1->Rows->Add(row);
 					}
 				}
 
+				//Если содержимое файла не удовлетворяет нужному формату
 				if (!good)
 					this->dataGridView1->BackgroundColor = System::Drawing::Color::YellowGreen;
 			}
 		}
+		
 
+		//Если содержимое файла удовлетворяет нужному формату
 		if (good) {
 			this->dataGridView1->Visible = true;
 			this->label_center->Visible = false;
 			this->CloseToolStripMenuItem->Enabled = true;
+			if (this->QuitToolStripMenuItem->Visible) {
+				this->SaveAsToolStripMenuItem->Enabled = true;
+				if (this->toolStripStatusLabel_filename->Text != L"Новый файл")
+					this->SaveToolStripMenuItem->Enabled = true;
+			}
 		}
 	}
 
@@ -630,9 +657,6 @@ namespace Practice {
 			this->CloseToolStripMenuItem->Enabled = false;
 			this->label_center->Text = L"Файл не выбран";
 		}
-		//Файл выбран
-		else
-			open_file();
 	}
 
 	//Вход в режим администратора
@@ -647,8 +671,6 @@ namespace Practice {
 			this->EnterToolStripMenuItem->Visible = false;
 			this->dataGridView1->BackgroundColor = System::Drawing::Color::LavenderBlush;
 			this->CreateToolStripMenuItem->Enabled = true;
-			this->SaveToolStripMenuItem->Enabled = true;
-			this->SaveAsToolStripMenuItem->Enabled = true;
 			this->CorrectToolStripMenuItem->Enabled = true;
 			this->dataGridView1->AllowUserToAddRows = true;
 			this->dataGridView1->AllowUserToDeleteRows = true;
@@ -662,7 +684,16 @@ namespace Practice {
 		if (this->toolStripStatusLabel_filename->Visible)
 			p->ShowDialog();
 
-		if (!this->toolStripStatusLabel_filename->Visible || p->DialogResult == System::Windows::Forms::DialogResult::No) {
+		if (!this->toolStripStatusLabel_filename->Visible || p->DialogResult == System::Windows::Forms::DialogResult::No || p->DialogResult == System::Windows::Forms::DialogResult::Yes) {
+			if (p->DialogResult == System::Windows::Forms::DialogResult::Yes) {
+				if (this->toolStripStatusLabel_filename->Visible) {
+					if (this->toolStripStatusLabel_filename->Text == L"Новый файл")
+						SaveAsToolStripMenuItem_Click(sender, e);
+					else
+						SaveToolStripMenuItem_Click(sender, e);
+				}
+			}
+
 			this->QuitToolStripMenuItem->Visible = false;
 			this->EnterToolStripMenuItem->Visible = true;
 			this->dataGridView1->BackgroundColor = System::Drawing::Color::Bisque;
@@ -723,12 +754,18 @@ namespace Practice {
 		
 	}
 
+	//Произведена смена режима - файл открывается заново
 	private: System::Void QuitToolStripMenuItem_VisibleChanged(System::Object^ sender, System::EventArgs^ e) {
-		open_file();
+		if (this->toolStripStatusLabel_filename->Visible)
+			open_file();
 	}
+
+	//Закрытие файла
 	private: System::Void CloseToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->toolStripStatusLabel_filename->Visible = false;
 	}
+
+	//Сохранение файла при помощи кнопки "Сохранить"
 	private: System::Void SaveToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		StreamWriter^ sw = gcnew StreamWriter(this->toolStripStatusLabel_filename->Text, false, System::Text::Encoding::GetEncoding(1251));
 		for (int i = 0; i < this->dataGridView1->Rows->Count - 1; i++)
@@ -739,6 +776,15 @@ namespace Practice {
 			sw->WriteLine(str);
 		}
 		sw->Close();
+	}
+
+	//Сохранение файла при помощи кнопки "Сохранить как..."
+	private: System::Void SaveAsToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (saveFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+			this->toolStripStatusLabel_filename->Text = saveFileDialog1->FileName;
+			this->toolStripStatusLabel_filename->Visible = true;
+			SaveToolStripMenuItem_Click(sender, e);
+		}
 	}
 };
 }
