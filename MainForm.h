@@ -447,8 +447,11 @@ namespace Practice {
 		p->ShowDialog();
 
 		//Выход
-		if (p->DialogResult == System::Windows::Forms::DialogResult::Cancel)
+		if (p->DialogResult == System::Windows::Forms::DialogResult::Cancel) {
 			this->Close();
+			if (this->Visible)
+				MainForm_Load(sender, e);
+		}
 		//Открыть файл
 		else if (p->DialogResult == System::Windows::Forms::DialogResult::No) {
 			OpenToolStripMenuItem_Click(sender, e);
@@ -456,8 +459,11 @@ namespace Practice {
 				MainForm_Load(sender, e);
 		}
 		//Вход в режим администратора
-		else if (p->DialogResult == System::Windows::Forms::DialogResult::Yes)
+		else if (p->DialogResult == System::Windows::Forms::DialogResult::Yes) {
 			EnterToolStripMenuItem_Click(sender, e);
+			if (EnterToolStripMenuItem->Visible)
+				MainForm_Load(sender, e);
+		}
 	}
 
 	//Закрытие формы
@@ -478,6 +484,13 @@ namespace Practice {
 						SaveToolStripMenuItem_Click(sender, e);
 				}
 			}
+		}
+		else {
+			e->Cancel = true;
+			String^ message = L"Вы уверены, что хотите выйти?";
+			String^ caption = L"Выход из программы";
+			if (MessageBox::Show(message, caption, MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes)
+				e->Cancel = false;
 		}
 	}
 
