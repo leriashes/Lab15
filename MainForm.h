@@ -687,6 +687,7 @@ namespace Practice {
 			this->dataGridView1->AllowUserToAddRows = true;
 			this->dataGridView1->AllowUserToDeleteRows = true;
 			this->dataGridView1->ReadOnly = false;
+			this->Column_ID->ReadOnly = true;
 		}
 	}
 	

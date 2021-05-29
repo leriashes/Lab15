@@ -103,17 +103,17 @@ namespace Practice {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(11, 24);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(600, 156);
-			this->ControlBox = false;
+			this->ClientSize = System::Drawing::Size(600, 136);
 			this->Controls->Add(this->button_exit);
 			this->Controls->Add(this->button_save_exit);
 			this->Controls->Add(this->button_cancel);
 			this->Controls->Add(this->label_exit);
 			this->MaximizeBox = false;
-			this->MaximumSize = System::Drawing::Size(624, 180);
+			this->MaximumSize = System::Drawing::Size(624, 200);
 			this->MinimizeBox = false;
-			this->MinimumSize = System::Drawing::Size(624, 180);
+			this->MinimumSize = System::Drawing::Size(624, 200);
 			this->Name = L"ExitForm";
+			this->ShowIcon = false;
 			this->ShowInTaskbar = false;
 			this->SizeGripStyle = System::Windows::Forms::SizeGripStyle::Hide;
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
