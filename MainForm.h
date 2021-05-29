@@ -630,8 +630,20 @@ namespace Practice {
 				}
 
 				//Если содержимое файла не удовлетворяет нужному формату
-				if (!good)
-					this->dataGridView1->BackgroundColor = System::Drawing::Color::YellowGreen;
+				if (!good) {
+					String^ message = L"Are you sure that you would like to close the form?";
+					String^ caption = L"Form Closing";
+					MessageBox::Show(message, caption,
+						MessageBoxButtons::YesNo,
+						MessageBoxIcon::Question);
+				}
+					//this->dataGridView1->BackgroundColor = System::Drawing::Color::YellowGreen;
+			}
+		}
+		else {
+			if (this->toolStripStatusLabel_filename->Text == L"Новый файл" && this->EnterToolStripMenuItem->Visible) {
+				this->toolStripStatusLabel_filename->Visible = false;
+				good = false;
 			}
 		}
 		
@@ -693,9 +705,11 @@ namespace Practice {
 						SaveToolStripMenuItem_Click(sender, e);
 				}
 			}
+			else if (this->toolStripStatusLabel_filename->Text == L"Новый файл")
+				this->dataGridView1->Visible = false;
 
-			this->QuitToolStripMenuItem->Visible = false;
 			this->EnterToolStripMenuItem->Visible = true;
+			this->QuitToolStripMenuItem->Visible = false;
 			this->dataGridView1->BackgroundColor = System::Drawing::Color::Bisque;
 			this->CreateToolStripMenuItem->Enabled = false;
 			this->SaveToolStripMenuItem->Enabled = false;

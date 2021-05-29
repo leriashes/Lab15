@@ -60,10 +60,11 @@ namespace Practice {
 			// 
 			// label_exit
 			// 
-			this->label_exit->AutoSize = true;
-			this->label_exit->Location = System::Drawing::Point(75, 20);
+			this->label_exit->BackColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label_exit->Dock = System::Windows::Forms::DockStyle::Top;
+			this->label_exit->Location = System::Drawing::Point(0, 0);
 			this->label_exit->Name = L"label_exit";
-			this->label_exit->Size = System::Drawing::Size(450, 50);
+			this->label_exit->Size = System::Drawing::Size(600, 80);
 			this->label_exit->TabIndex = 0;
 			this->label_exit->Text = L"Вы уверены, что хотите выйти\?\r\nВсе несохранённые изменения будут утеряны.";
 			this->label_exit->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
@@ -102,22 +103,21 @@ namespace Practice {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(11, 24);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(600, 176);
+			this->ClientSize = System::Drawing::Size(600, 156);
 			this->ControlBox = false;
 			this->Controls->Add(this->button_exit);
 			this->Controls->Add(this->button_save_exit);
 			this->Controls->Add(this->button_cancel);
 			this->Controls->Add(this->label_exit);
 			this->MaximizeBox = false;
-			this->MaximumSize = System::Drawing::Size(624, 200);
+			this->MaximumSize = System::Drawing::Size(624, 180);
 			this->MinimizeBox = false;
-			this->MinimumSize = System::Drawing::Size(624, 200);
+			this->MinimumSize = System::Drawing::Size(624, 180);
 			this->Name = L"ExitForm";
 			this->ShowInTaskbar = false;
 			this->SizeGripStyle = System::Windows::Forms::SizeGripStyle::Hide;
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->ResumeLayout(false);
-			this->PerformLayout();
 
 		}
 #pragma endregion
