@@ -129,7 +129,7 @@ namespace Practice {
 			this->AutoScaleDimensions = System::Drawing::SizeF(11, 24);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::LavenderBlush;
-			this->ClientSize = System::Drawing::Size(746, 476);
+			this->ClientSize = System::Drawing::Size(746, 516);
 			this->ControlBox = false;
 			this->Controls->Add(this->label_hello);
 			this->Controls->Add(this->button_exit);

@@ -49,7 +49,7 @@ namespace Practice {
 	private: System::Windows::Forms::ToolStripMenuItem^ ExitToolStripMenuItem;
 	private: System::Windows::Forms::StatusStrip^ statusStrip1;
 	private: System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel_filename;
-	private: System::Windows::Forms::FolderBrowserDialog^ folderBrowserDialog1;
+
 	private: System::Windows::Forms::ToolStripMenuItem^ OpenToolStripMenuItem;
 	private: System::Windows::Forms::OpenFileDialog^ openFileDialog1;
 	private: System::Windows::Forms::ToolStripMenuItem^ SaveToolStripMenuItem;
@@ -133,7 +133,6 @@ namespace Practice {
 			this->QuitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->statusStrip1 = (gcnew System::Windows::Forms::StatusStrip());
 			this->toolStripStatusLabel_filename = (gcnew System::Windows::Forms::ToolStripStatusLabel());
-			this->folderBrowserDialog1 = (gcnew System::Windows::Forms::FolderBrowserDialog());
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->dataGridView1 = (gcnew System::Windows::Forms::DataGridView());
 			this->Column_name = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
@@ -347,7 +346,9 @@ namespace Practice {
 			this->dataGridView1->Size = System::Drawing::Size(1500, 898);
 			this->dataGridView1->TabIndex = 2;
 			this->dataGridView1->Visible = false;
+			this->dataGridView1->CellValueChanged += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &MainForm::dataGridView1_CellValueChanged);
 			this->dataGridView1->SortCompare += gcnew System::Windows::Forms::DataGridViewSortCompareEventHandler(this, &MainForm::dataGridView1_SortCompare);
+			this->dataGridView1->UserAddedRow += gcnew System::Windows::Forms::DataGridViewRowEventHandler(this, &MainForm::dataGridView1_UserAddedRow);
 			// 
 			// Column_name
 			// 
@@ -438,6 +439,91 @@ namespace Practice {
 		return result;
 	}
 
+	//Проверка ячейки (1, 3-5)
+	private: Boolean check_value(String^ value, int mode) {
+		Boolean good = true;
+
+		switch (mode) {
+		case 0:
+			for (int i = 0; i < value->Length && good; i++)
+				if (!isalpha_bukva(value[i]) && value[i] != ' ' || value[i] == ' ' && i == 0)
+					good = false;
+			break;
+		case 2:
+			for (int i = 0; i < value->Length && good; i++)
+				if (!isdigit(value[i]))
+					good = false;
+			break;
+		case 3:
+			for (int i = 0, p = 0; i < value->Length && good; i++) {
+				if (value[i] == ',')
+					p += 1;
+
+				if (p != 1 && !isdigit(value[i]) || p > 1 || p == 1 && value[i] == ',' && value->Length - i != 2 && value->Length - i != 3 && i > 0)
+					good = false;
+			}
+
+			if (good && Convert::ToDouble(value) == 0)
+				good = false;
+			break;
+		case 4:
+			for (int i = 0; i < value->Length - 1 && good; i++)
+				if (!isdigit(value[i]))
+					good = false;
+
+			if (good && value[value->Length - 1] != '+' && !isdigit(value[value->Length - 1]))
+				good = false;
+			break;
+		default:
+			good = false;
+			break;
+		}
+		
+		return good;
+	}
+
+	//Проверка ячейки (2)
+	private: Boolean check_value(String^ id, String^ name, int row) {
+		Boolean good = true;
+
+		if (id->Length != 6 || id[0] != name[0] && id[0] != name[0] - 32 && (id[0] != L'Ё' || id[0] != name[0] - 80) || id[1] != '-')
+			good = false;
+
+		for (int i = 0; i < 4 && good; i++)
+			if (!isdigit(id[2 + i]))
+				good = false;
+
+		for (int i = 0; i < this->dataGridView1->Rows->Count && good; i++)
+			if (this->dataGridView1->Rows[i]->Cells[1]->Value == id && i != row)
+				good = false;
+
+		return good;
+	}
+	
+	//Форматирование значения ячейки
+	private: String^ value_format(String^ str, int mode) {
+		String^ value = "";
+		
+		if (mode == 3) {
+			value = Convert::ToString(Convert::ToDouble(str));
+			if (value->Length > 2 && value[value->Length - 2] == ',')
+				value += "0";
+			else if (value->Length < 3 || value[value->Length - 3] != ',')
+				value += ",00";
+		}
+		else if (mode == 4) {
+			if (str[str->Length - 1] == '+')
+				for (int i = 0; i < str->Length - 1; i++)
+					value += str[i];
+			else
+				value = str;
+
+			value = Convert::ToString(Convert::ToInt64(value)) + "+";
+		}
+
+		return value;
+	}
+
 	//Запуск программы
 	private: System::Void MainForm_Load(System::Object^ sender, System::EventArgs^ e) {
 		this->Show();
@@ -454,15 +540,15 @@ namespace Practice {
 		}
 		//Открыть файл
 		else if (p->DialogResult == System::Windows::Forms::DialogResult::No) {
-			OpenToolStripMenuItem_Click(sender, e);
-			if (this->toolStripStatusLabel_filename->Visible != true)
-				MainForm_Load(sender, e);
+OpenToolStripMenuItem_Click(sender, e);
+if (this->toolStripStatusLabel_filename->Visible != true)
+MainForm_Load(sender, e);
 		}
 		//Вход в режим администратора
 		else if (p->DialogResult == System::Windows::Forms::DialogResult::Yes) {
-			EnterToolStripMenuItem_Click(sender, e);
-			if (EnterToolStripMenuItem->Visible)
-				MainForm_Load(sender, e);
+		EnterToolStripMenuItem_Click(sender, e);
+		if (EnterToolStripMenuItem->Visible)
+			MainForm_Load(sender, e);
 		}
 	}
 
@@ -494,19 +580,19 @@ namespace Practice {
 		}
 	}
 
-	//Закрытие формы через кнопку Выход
+		   //Закрытие формы через кнопку Выход
 	private: System::Void ExitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->Close();
 	}
 
-	//Создание файла
+		   //Создание файла
 	private: System::Void CreateToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->toolStripStatusLabel_filename->Text = L"Новый файл";
 		this->toolStripStatusLabel_filename->Visible = true;
 		open_file();
 	}
 
-	//Открытие файла
+		   //Открытие файла
 	private: System::Void OpenToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		if (this->openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 			this->toolStripStatusLabel_filename->Text = this->openFileDialog1->FileName;
@@ -515,7 +601,7 @@ namespace Practice {
 		}
 	}
 
-	//Открытие файла
+		   //Открытие файла
 	private: Void open_file() {
 		Boolean good = true;
 		this->dataGridView1->Rows->Clear();
@@ -547,98 +633,24 @@ namespace Practice {
 							row->Cells[i]->Value = splittedstr[i];
 
 						//Проверка первого столбца
-						for (int i = 0; i < splittedstr[0]->Length; i++)
-							if (!isalpha_bukva(splittedstr[0][i]) && splittedstr[0][i] != ' ' || splittedstr[0][i] == ' ' && i == 0) {
-								good = false;
-								break;
-							}
-
-						if (good) {
+						if (good = check_value(splittedstr[0], 0))
 							//Проверка второго столбца
-							if (splittedstr[1]->Length != 6 || splittedstr[1][0] != splittedstr[0][0] && splittedstr[1][0] != splittedstr[0][0] - 32 && (splittedstr[1][0] != L'Ё' || splittedstr[1][0] != splittedstr[0][0] - 80) || splittedstr[1][1] != '-') {
-								good = false;
-								break;
-							}
-
-							for (int i = 0; i < 4; i++)
-								if (!isdigit(splittedstr[1][2 + i])) {
-									good = false;
-									break;
-								}
-
-							for (int i = 0; i < this->dataGridView1->Rows->Count; i++)
-								if (this->dataGridView1->Rows[i]->Cells[1] == row->Cells[1]) {
-									good = false;
-									break;
-								}
-
-							if (good) {
+							if (good = check_value(splittedstr[1], splittedstr[0], this->dataGridView1->Rows->Count))
 								//Проверка третьего столбца
-								for (int i = 0; i < splittedstr[2]->Length; i++)
-									if (!isdigit(splittedstr[2][i])) {
-										good = false;
-										break;
-									}
-
-								if (good) {
-									row->Cells[2]->Value = Convert::ToInt64(splittedstr[2]);
-
+								if (good = check_value(splittedstr[2], 2)) {
+									row->Cells[2]->Value = Convert::ToString(Convert::ToInt64(splittedstr[2]));
 									//Проверка четвёртого столбца
-									for (int i = 0, p = 0; i < splittedstr[3]->Length; i++) {
-										if (splittedstr[3][i] == ',')
-											p += 1;
-
-										if (p != 1 && !isdigit(splittedstr[3][i]) || p > 1 || p == 1 && splittedstr[3][i] == ',' && splittedstr[3]->Length - i != 2 && splittedstr[3]->Length - i != 3 && i > 0) {
-											good = false;
-											break;
-										}
-									}
-
-									if (Convert::ToDouble(splittedstr[3]) == 0) {
-										good = false;
-										break;
-									}
-
-									if (good) {
-										String^ stroka = Convert::ToString(Convert::ToDouble(splittedstr[3]));
-
-										if (stroka->Length > 2 && stroka[stroka->Length - 2] == ',')
-											stroka += "0";
-										else if (stroka->Length < 3 || stroka[stroka->Length - 3] != ',')
-											stroka += ",00";
-										row->Cells[3]->Value = stroka;
-
+									if (good = check_value(splittedstr[3], 3)) {
+										row->Cells[3]->Value = value_format(splittedstr[3], 3);
 										//Проверка пятого столбца
-										for (int i = 0, p = 0; i < splittedstr[4]->Length - 1; i++) {
-
-											if (!isdigit(splittedstr[3][i])) {
-												good = false;
-												break;
-											}
-										}
-
-										if (splittedstr[4][splittedstr[4]->Length - 1] != '+' && !isdigit(splittedstr[4][splittedstr[4]->Length - 1])) {
-											good = false;
-											break;
-										}
-										else {
-											String^ age;
-											if (splittedstr[4][splittedstr[4]->Length - 1] == '+')
-												for (int i = 0; i < splittedstr[4]->Length - 1; i++)
-													age += splittedstr[4][i];
-											else
-												age = splittedstr[4];
-
-											row->Cells[4]->Value = Convert::ToString(Convert::ToInt64(age)) + "+";
-										}
+										if (good = check_value(splittedstr[4], 4))
+											row->Cells[4]->Value = value_format(splittedstr[4], 4);
+										this->dataGridView1->Rows->Add(row);
 									}
 								}
-							}
-						}
-						else
-							break;
 
-						this->dataGridView1->Rows->Add(row);
+						if (!good)
+							break;
 					}
 				}
 
@@ -817,6 +829,36 @@ namespace Practice {
 			this->toolStripStatusLabel_filename->Text = saveFileDialog1->FileName;
 			this->toolStripStatusLabel_filename->Visible = true;
 			SaveToolStripMenuItem_Click(sender, e);
+		}
+	}
+
+	private: System::Void dataGridView1_CellValueChanged(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
+		int a = e->ColumnIndex;
+		int b = e->RowIndex;
+		a = b;
+		Boolean good = true;
+		String^ val;
+		if (e->ColumnIndex == 0 && e->RowIndex != -1) {
+			//Проверка первого столбца
+			val = this->dataGridView1->Rows[e->RowIndex]->Cells[0]->Value->ToString();
+			for (int i = 0; i < val->Length; i++)
+				if (!isalpha_bukva(val[i]) && val[i] != ' ' || val[i] == ' ' && i == 0) {
+					good = false;
+					this->dataGridView1->Rows[e->RowIndex]->Cells[0]->Style->BackColor = System::Drawing::Color::LightCyan;
+					break;
+				}
+			if (good)
+				this->dataGridView1->Rows[e->RowIndex]->Cells[1]->Value = val[0] + "-0001";
+			else
+				this->dataGridView1->Rows[e->RowIndex]->Cells[1]->Style->BackColor = System::Drawing::Color::LightCyan;
+		}
+	}
+
+	private: System::Void dataGridView1_UserAddedRow(System::Object^ sender, System::Windows::Forms::DataGridViewRowEventArgs^ e) {
+		this->dataGridView1->Rows[this->dataGridView1->Rows->Count - 2]->Cells[0]->Style->BackColor = System::Drawing::Color::LightCyan;
+		for (int i = 0; i < 5; i++) {
+			this->dataGridView1->Rows[this->dataGridView1->Rows->Count - 2]->Cells[i]->Value = " ";
+			this->dataGridView1->Rows[this->dataGridView1->Rows->Count - 2]->Cells[i]->Style->BackColor = System::Drawing::Color::LightCyan;
 		}
 	}
 };
