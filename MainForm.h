@@ -439,6 +439,14 @@ namespace Practice {
 		return result;
 	}
 
+	//Проверка является ли символ цифрой
+	private: Boolean isdigit_ziphra(wchar_t symb) {
+		Boolean result = true;
+
+		if (symb < '0' || symb > '9')
+			result = false;
+		return result;
+	}
 	//Проверка ячейки (1, 3-5)
 	private: Boolean check_value(String^ value, int mode) {
 		Boolean good = true;
@@ -451,7 +459,7 @@ namespace Practice {
 			break;
 		case 2:
 			for (int i = 0; i < value->Length && good; i++)
-				if (!isdigit(value[i]))
+				if (!isdigit_ziphra(value[i]))
 					good = false;
 			break;
 		case 3:
@@ -459,7 +467,7 @@ namespace Practice {
 				if (value[i] == ',')
 					p += 1;
 
-				if (p != 1 && !isdigit(value[i]) || p > 1 || p == 1 && value[i] == ',' && value->Length - i != 2 && value->Length - i != 3 && i > 0)
+				if (p != 1 && !isdigit_ziphra(value[i]) || p > 1 || p == 1 && value[i] == ',' && value->Length - i != 2 && value->Length - i != 3 && i > 0)
 					good = false;
 			}
 
@@ -468,10 +476,10 @@ namespace Practice {
 			break;
 		case 4:
 			for (int i = 0; i < value->Length - 1 && good; i++)
-				if (!isdigit(value[i]))
+				if (!isdigit_ziphra(value[i]))
 					good = false;
 
-			if (good && value[value->Length - 1] != '+' && !isdigit(value[value->Length - 1]))
+			if (good && value[value->Length - 1] != '+' && !isdigit_ziphra(value[value->Length - 1]))
 				good = false;
 			break;
 		default:
@@ -490,11 +498,11 @@ namespace Practice {
 			good = false;
 
 		for (int i = 0; i < 4 && good; i++)
-			if (!isdigit(id[2 + i]))
+			if (!isdigit_ziphra(id[2 + i]))
 				good = false;
 
 		for (int i = 0; i < this->dataGridView1->Rows->Count && good; i++)
-			if (this->dataGridView1->Rows[i]->Cells[1]->Value == id && i != row)
+			if (this->dataGridView1->Rows[i]->Cells[1]->Value != nullptr && this->dataGridView1->Rows[i]->Cells[1]->Value->ToString() == id && i != row)
 				good = false;
 
 		return good;
@@ -643,9 +651,10 @@ MainForm_Load(sender, e);
 									if (good = check_value(splittedstr[3], 3)) {
 										row->Cells[3]->Value = value_format(splittedstr[3], 3);
 										//Проверка пятого столбца
-										if (good = check_value(splittedstr[4], 4))
+										if (good = check_value(splittedstr[4], 4)) {
 											row->Cells[4]->Value = value_format(splittedstr[4], 4);
-										this->dataGridView1->Rows->Add(row);
+											this->dataGridView1->Rows->Add(row);
+										}
 									}
 								}
 
@@ -796,7 +805,6 @@ MainForm_Load(sender, e);
 			e->SortResult = System::String::Compare(
 				e->CellValue1->ToString(), e->CellValue2->ToString());
 		e->Handled = true;
-		
 	}
 
 	//Произведена смена режима - файл открывается заново
@@ -833,33 +841,88 @@ MainForm_Load(sender, e);
 	}
 
 	private: System::Void dataGridView1_CellValueChanged(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
-		int a = e->ColumnIndex;
-		int b = e->RowIndex;
-		a = b;
 		Boolean good = true;
-		String^ val;
-		if (e->ColumnIndex == 0 && e->RowIndex != -1) {
-			//Проверка первого столбца
-			val = this->dataGridView1->Rows[e->RowIndex]->Cells[0]->Value->ToString();
-			for (int i = 0; i < val->Length; i++)
-				if (!isalpha_bukva(val[i]) && val[i] != ' ' || val[i] == ' ' && i == 0) {
-					good = false;
-					this->dataGridView1->Rows[e->RowIndex]->Cells[0]->Style->BackColor = System::Drawing::Color::LightCyan;
-					break;
+		String^ value;
+
+		if (e->RowIndex != -1) {
+			if (this->dataGridView1->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value != nullptr) {
+				value = this->dataGridView1->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+				if (value->Length > 0) {
+					if (e->ColumnIndex != 1)
+						good = check_value(value, e->ColumnIndex);
+					else
+						good = check_value(value, this->dataGridView1->Rows[e->RowIndex]->Cells[0]->Value->ToString(), e->RowIndex);
+
+					switch (e->ColumnIndex) {
+					case 0:
+						if (good) {
+							Char symb = value[0];
+
+							if (symb >= 'a' && symb <= 'z' || symb >= 'а' && symb <= 'е' || symb >= 'ж' && symb <= 'я')
+								symb -= 32;
+							else if (symb == 'ё')
+								symb -= 80;
+
+							this->dataGridView1->Rows[e->RowIndex]->Cells[1]->Value = symb + "-0001";
+						}
+						break;
+					case 1:
+						if (!good) {
+							String^ num = "";
+							for (int i = 0; i < 4; i++)
+								num += value[i + 2];
+							num = Convert::ToString(Convert::ToInt64(num) + 1);
+							while (num->Length < 4)
+								num = "0" + num;
+							num = value[0] + "-" + num;
+							this->dataGridView1->Rows[e->RowIndex]->Cells[1]->Value = Convert::ToString(num);
+						}
+						break;
+					case 2:
+						if (good)
+							this->dataGridView1->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = Convert::ToString(Convert::ToInt64(value));
+						break;
+					case 3:
+						if (good)
+							this->dataGridView1->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = value_format(value, 3);
+						break;
+					case 4:
+						if (good)
+							this->dataGridView1->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = value_format(value, 4);
+						break;
+					default:
+						break;
+					}
 				}
-			if (good)
-				this->dataGridView1->Rows[e->RowIndex]->Cells[1]->Value = val[0] + "-0001";
+				else
+					good = false;
+				
+				if (e->ColumnIndex != 1 && this->dataGridView1->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value != nullptr && value->Length > 0) {
+					if (good) {
+						this->dataGridView1->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Style->BackColor = System::Drawing::Color::White;
+						if (e->ColumnIndex == 0)
+							this->dataGridView1->Rows[e->RowIndex]->Cells[1]->Style->BackColor = System::Drawing::Color::White;
+					}
+					else {
+						this->dataGridView1->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Style->BackColor = System::Drawing::Color::LightCyan;
+						this->dataGridView1->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = "";
+						if (e->ColumnIndex == 0) {
+							this->dataGridView1->Rows[e->RowIndex]->Cells[1]->Style->BackColor = System::Drawing::Color::LightCyan;
+							this->dataGridView1->Rows[e->RowIndex]->Cells[1]->Value = "";
+						}
+						MessageBox::Show(L"Введённое значение не удовлетворяет нужному формату.");
+					}
+				}
+			}
 			else
-				this->dataGridView1->Rows[e->RowIndex]->Cells[1]->Style->BackColor = System::Drawing::Color::LightCyan;
+				this->dataGridView1->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Style->BackColor = System::Drawing::Color::LightCyan;
+
 		}
 	}
 
 	private: System::Void dataGridView1_UserAddedRow(System::Object^ sender, System::Windows::Forms::DataGridViewRowEventArgs^ e) {
-		this->dataGridView1->Rows[this->dataGridView1->Rows->Count - 2]->Cells[0]->Style->BackColor = System::Drawing::Color::LightCyan;
-		for (int i = 0; i < 5; i++) {
-			this->dataGridView1->Rows[this->dataGridView1->Rows->Count - 2]->Cells[i]->Value = " ";
+		for (int i = 0; i < 5; i++)
 			this->dataGridView1->Rows[this->dataGridView1->Rows->Count - 2]->Cells[i]->Style->BackColor = System::Drawing::Color::LightCyan;
-		}
 	}
 };
 }
