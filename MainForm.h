@@ -263,13 +263,13 @@ namespace Practice {
 			// AddRowToolStripMenuItem
 			// 
 			this->AddRowToolStripMenuItem->Name = L"AddRowToolStripMenuItem";
-			this->AddRowToolStripMenuItem->Size = System::Drawing::Size(293, 40);
+			this->AddRowToolStripMenuItem->Size = System::Drawing::Size(315, 40);
 			this->AddRowToolStripMenuItem->Text = L"Добавить строку";
 			// 
 			// DelRowToolStripMenuItem
 			// 
 			this->DelRowToolStripMenuItem->Name = L"DelRowToolStripMenuItem";
-			this->DelRowToolStripMenuItem->Size = System::Drawing::Size(293, 40);
+			this->DelRowToolStripMenuItem->Size = System::Drawing::Size(315, 40);
 			this->DelRowToolStripMenuItem->Text = L"Удалить строку";
 			// 
 			// QueryToolStripMenuItem
@@ -588,20 +588,32 @@ MainForm_Load(sender, e);
 		}
 	}
 
-		   //Закрытие формы через кнопку Выход
+	//Закрытие формы через кнопку Выход
 	private: System::Void ExitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->Close();
 	}
 
-		   //Создание файла
+	//Создание файла
 	private: System::Void CreateToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (this->QuitToolStripMenuItem->Visible && this->toolStripStatusLabel_filename->Visible && MessageBox::Show(L"Сохранить изменения?", "", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes) {
+			if (this->toolStripStatusLabel_filename->Text == L"Новый файл")
+				SaveAsToolStripMenuItem_Click(sender, e);
+			else
+				SaveToolStripMenuItem_Click(sender, e);
+		}
 		this->toolStripStatusLabel_filename->Text = L"Новый файл";
 		this->toolStripStatusLabel_filename->Visible = true;
 		open_file();
 	}
 
-		   //Открытие файла
+	//Открытие файла
 	private: System::Void OpenToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (this->QuitToolStripMenuItem->Visible && this->toolStripStatusLabel_filename->Visible && MessageBox::Show(L"Сохранить изменения?", "", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes) {
+			if (this->toolStripStatusLabel_filename->Text == L"Новый файл")
+				SaveAsToolStripMenuItem_Click(sender, e);
+			else
+				SaveToolStripMenuItem_Click(sender, e);
+		}
 		if (this->openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 			this->toolStripStatusLabel_filename->Text = this->openFileDialog1->FileName;
 			this->toolStripStatusLabel_filename->Visible = true;
@@ -609,7 +621,7 @@ MainForm_Load(sender, e);
 		}
 	}
 
-		   //Открытие файла
+	//Открытие файла
 	private: Void open_file() {
 		Boolean good = true;
 		this->dataGridView1->Rows->Clear();
@@ -696,6 +708,7 @@ MainForm_Load(sender, e);
 				this->SaveAsToolStripMenuItem->Enabled = true;
 				if (this->toolStripStatusLabel_filename->Text != L"Новый файл")
 					this->SaveToolStripMenuItem->Enabled = true;
+				this->CorrectToolStripMenuItem->Enabled = true;
 			}
 		}
 	}
@@ -706,6 +719,7 @@ MainForm_Load(sender, e);
 			this->dataGridView1->Visible = false;
 			this->label_center->Visible = true;
 			this->CloseToolStripMenuItem->Enabled = false;
+			this->CorrectToolStripMenuItem->Enabled = false;
 			this->label_center->Text = L"Файл не выбран";
 		}
 	}
@@ -720,9 +734,8 @@ MainForm_Load(sender, e);
 		if (p->parol) {
 			this->QuitToolStripMenuItem->Visible = true;
 			this->EnterToolStripMenuItem->Visible = false;
-			this->dataGridView1->BackgroundColor = System::Drawing::Color::LavenderBlush;
 			this->CreateToolStripMenuItem->Enabled = true;
-			this->CorrectToolStripMenuItem->Enabled = true;
+			this->dataGridView1->BackgroundColor = System::Drawing::Color::LavenderBlush;
 			this->dataGridView1->AllowUserToAddRows = true;
 			this->dataGridView1->AllowUserToDeleteRows = true;
 			this->dataGridView1->ReadOnly = false;
@@ -815,6 +828,12 @@ MainForm_Load(sender, e);
 
 	//Закрытие файла
 	private: System::Void CloseToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (QuitToolStripMenuItem->Visible && MessageBox::Show(L"Сохранить изменения?", "", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes) {
+			if (this->toolStripStatusLabel_filename->Text == L"Новый файл")
+				SaveAsToolStripMenuItem_Click(sender, e);
+			else
+				SaveToolStripMenuItem_Click(sender, e);
+		}
 		this->toolStripStatusLabel_filename->Visible = false;
 	}
 
@@ -858,9 +877,9 @@ MainForm_Load(sender, e);
 						if (good) {
 							Char symb = value[0];
 
-							if (symb >= 'a' && symb <= 'z' || symb >= 'а' && symb <= 'е' || symb >= 'ж' && symb <= 'я')
+							if (symb >= 'a' && symb <= 'z' || symb >= L'а' && symb <= L'е' || symb >= L'ж' && symb <= L'я')
 								symb -= 32;
-							else if (symb == 'ё')
+							else if (symb == L'ё')
 								symb -= 80;
 
 							this->dataGridView1->Rows[e->RowIndex]->Cells[1]->Value = symb + "-0001";
