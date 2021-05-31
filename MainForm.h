@@ -271,15 +271,18 @@ namespace Practice {
 			// 
 			// DelRowToolStripMenuItem
 			// 
+			this->DelRowToolStripMenuItem->Enabled = false;
 			this->DelRowToolStripMenuItem->Name = L"DelRowToolStripMenuItem";
 			this->DelRowToolStripMenuItem->Size = System::Drawing::Size(317, 40);
 			this->DelRowToolStripMenuItem->Text = L"Удалить строку";
+			this->DelRowToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::DelRowToolStripMenuItem_Click);
 			// 
 			// DelAllRowsToolStripMenuItem
 			// 
 			this->DelAllRowsToolStripMenuItem->Name = L"DelAllRowsToolStripMenuItem";
 			this->DelAllRowsToolStripMenuItem->Size = System::Drawing::Size(317, 40);
 			this->DelAllRowsToolStripMenuItem->Text = L"Удалить все строки";
+			this->DelAllRowsToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::DelAllRowsToolStripMenuItem_Click);
 			// 
 			// QueryToolStripMenuItem
 			// 
@@ -356,8 +359,10 @@ namespace Practice {
 			this->dataGridView1->TabIndex = 2;
 			this->dataGridView1->Visible = false;
 			this->dataGridView1->CellValueChanged += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &MainForm::dataGridView1_CellValueChanged);
+			this->dataGridView1->RowStateChanged += gcnew System::Windows::Forms::DataGridViewRowStateChangedEventHandler(this, &MainForm::dataGridView1_RowStateChanged);
 			this->dataGridView1->SortCompare += gcnew System::Windows::Forms::DataGridViewSortCompareEventHandler(this, &MainForm::dataGridView1_SortCompare);
 			this->dataGridView1->UserAddedRow += gcnew System::Windows::Forms::DataGridViewRowEventHandler(this, &MainForm::dataGridView1_UserAddedRow);
+			this->dataGridView1->UserDeletedRow += gcnew System::Windows::Forms::DataGridViewRowEventHandler(this, &MainForm::dataGridView1_UserDeletedRow);
 			// 
 			// Column_name
 			// 
@@ -732,6 +737,10 @@ namespace Practice {
 				if (this->toolStripStatusLabel_filename->Text != L"Новый файл")
 					this->SaveToolStripMenuItem->Enabled = true;
 				this->CorrectToolStripMenuItem->Enabled = true;
+				if (this->dataGridView1->Rows->Count > 1)
+					this->DelAllRowsToolStripMenuItem->Enabled = true;
+				else
+					this->DelAllRowsToolStripMenuItem->Enabled = false;
 			}
 		}
 	}
@@ -883,6 +892,7 @@ namespace Practice {
 		}
 	}
 
+	//Изменение значения в ячейке
 	private: System::Void dataGridView1_CellValueChanged(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
 		Boolean good = true;
 		String^ value;
@@ -963,15 +973,56 @@ namespace Practice {
 		}
 	}
 
+	//Добавление ряда
 	private: System::Void dataGridView1_UserAddedRow(System::Object^ sender, System::Windows::Forms::DataGridViewRowEventArgs^ e) {
 		for (Int16 i = 0; i < 5; i++)
 			this->dataGridView1->Rows[this->dataGridView1->Rows->Count - 2]->Cells[i]->Style->BackColor = System::Drawing::Color::LightCyan;
+		this->DelAllRowsToolStripMenuItem->Enabled = true;
 	}
 
+	//Добавление ряда кнопкой
 	private: System::Void AddRowToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->dataGridView1->Rows->Add();
 		System::Windows::Forms::DataGridViewRowEventArgs^ d;
 		dataGridView1_UserAddedRow(sender, d);
+	}
+
+	//Удаление всех строк
+	private: System::Void DelAllRowsToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (MessageBox::Show(L"Вы уверены, что хотите удалить все строки?", "", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes) {
+			this->DelAllRowsToolStripMenuItem->Enabled = false;
+			this->dataGridView1->Rows->Clear();
+		}
+	}
+
+	//Выбор ряда/рядов
+	private: System::Void dataGridView1_RowStateChanged(System::Object^ sender, System::Windows::Forms::DataGridViewRowStateChangedEventArgs^ e) {
+		Int64 choosed = 0;
+		for (Int64 i = 0; i < this->dataGridView1->Rows->Count - 1 && choosed < 2; i++)
+			if (this->dataGridView1->Rows[i]->Selected)
+				choosed += 1;
+
+		this->DelRowToolStripMenuItem->Text = L"Удалить строку";
+		if (choosed > 0) {
+			this->DelRowToolStripMenuItem->Enabled = true;
+			if (choosed > 1)
+				this->DelRowToolStripMenuItem->Text = L"Удалить строки";
+		}
+		else
+			this->DelRowToolStripMenuItem->Enabled = false;
+	}
+
+	//Удаление ряда/рядов
+	private: System::Void DelRowToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		for (Int64 i = 0; i < this->dataGridView1->Rows->Count - 1; i++)
+			if (this->dataGridView1->Rows[i]->Selected)
+				this->dataGridView1->Rows->Remove(this->dataGridView1->Rows[i]);
+		System::Windows::Forms::DataGridViewRowEventArgs^ d;
+		dataGridView1_UserDeletedRow(sender, d);
+	}
+	private: System::Void dataGridView1_UserDeletedRow(System::Object^ sender, System::Windows::Forms::DataGridViewRowEventArgs^ e) {
+		if (this->dataGridView1->Rows->Count == 1)
+			this->DelAllRowsToolStripMenuItem->Enabled = false;
 	}
 };
 }
