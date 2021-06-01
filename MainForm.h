@@ -813,47 +813,59 @@ namespace Practice {
 
 	//Сортировка в столбцах
 	private: System::Void dataGridView1_SortCompare(System::Object^ sender, System::Windows::Forms::DataGridViewSortCompareEventArgs^ e) {
-		if (e->Column->Name == "Column_number") {
-			Int64 v1, v2;
-			v1 = Convert::ToInt64(e->CellValue1);
-			v2 = Convert::ToInt64(e->CellValue2);
-			if (v1 > v2)
-				e->SortResult = 1;
-			else if (v1 < v2)
-				e->SortResult = -1;
+		if (e->CellValue1 != nullptr && e->CellValue2 != nullptr) {
+			if (e->Column->Name == "Column_number") {
+				Int64 v1, v2;
+				v1 = Convert::ToInt64(e->CellValue1);
+				v2 = Convert::ToInt64(e->CellValue2);
+				if (v1 > v2)
+					e->SortResult = 1;
+				else if (v1 < v2)
+					e->SortResult = -1;
+				else
+					e->SortResult = 0;
+			}
+			else if (e->Column->Name == "Column_cost") {
+				Double v1, v2;
+				v1 = Convert::ToDouble(e->CellValue1);
+				v2 = Convert::ToDouble(e->CellValue2);
+				if (v1 > v2)
+					e->SortResult = 1;
+				else if (v1 < v2)
+					e->SortResult = -1;
+				else
+					e->SortResult = 0;
+			}
+			else if (e->Column->Name == "Column_age") {
+				Int64 v1, v2;
+				String^ va1, ^ va2;
+				for (Int16 i = 0; i < e->CellValue1->ToString()->Length - 1; i++)
+					va1 += e->CellValue1->ToString()[i];
+				for (Int16 i = 0; i < e->CellValue2->ToString()->Length - 1; i++)
+					va2 += e->CellValue2->ToString()[i];
+				v1 = Convert::ToInt64(va1);
+				v2 = Convert::ToInt64(va2);
+				if (v1 > v2)
+					e->SortResult = 1;
+				else if (v1 < v2)
+					e->SortResult = -1;
+				else
+					e->SortResult = 0;
+			}
 			else
-				e->SortResult = 0;
+				e->SortResult = System::String::Compare(
+					e->CellValue1->ToString(), e->CellValue2->ToString());
 		}
-		else if (e->Column->Name == "Column_cost") {
-			Double v1, v2;
-			v1 = Convert::ToDouble(e->CellValue1);
-			v2 = Convert::ToDouble(e->CellValue2);
-			if (v1 > v2)
-				e->SortResult = 1;
-			else if (v1 < v2)
-				e->SortResult = -1;
+		else {
+			if (e->CellValue1 == nullptr) {
+				if (e->CellValue2 == nullptr)
+					e->SortResult = 0;
+				else
+					e->SortResult = -1;
+			}
 			else
-				e->SortResult = 0;
-		}
-		else if (e->Column->Name == "Column_age") {
-			Int64 v1, v2;
-			String^ va1,^ va2;
-			for (Int16 i = 0; i < e->CellValue1->ToString()->Length - 1; i++)
-				va1 += e->CellValue1->ToString()[i];
-			for (Int16 i = 0; i < e->CellValue2->ToString()->Length - 1; i++)
-				va2 += e->CellValue2->ToString()[i];
-			v1 = Convert::ToInt64(va1);
-			v2 = Convert::ToInt64(va2);
-			if (v1 > v2)
 				e->SortResult = 1;
-			else if (v1 < v2)
-				e->SortResult = -1;
-			else
-				e->SortResult = 0;
 		}
-		else
-			e->SortResult = System::String::Compare(
-				e->CellValue1->ToString(), e->CellValue2->ToString());
 		e->Handled = true;
 	}
 
