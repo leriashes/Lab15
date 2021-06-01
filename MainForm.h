@@ -444,6 +444,8 @@ namespace Practice {
 
 		}
 #pragma endregion
+	private: Boolean changes = false;
+
 	//Проверка является ли символ буквой
 	private: Boolean isalpha_bukva(wchar_t symb) {
 		Boolean result = true;
@@ -765,6 +767,7 @@ namespace Practice {
 
 		//Если пароль верный
 		if (p->parol) {
+			MessageBox::Show(L"Вы вошли в режим администратора!");
 			this->QuitToolStripMenuItem->Visible = true;
 			this->EnterToolStripMenuItem->Visible = false;
 			this->CreateToolStripMenuItem->Enabled = true;
