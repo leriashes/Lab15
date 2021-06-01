@@ -446,6 +446,16 @@ namespace Practice {
 #pragma endregion
 	private: Boolean changes = false;
 
+	//Проверка на наличие пустых ячеек в файле
+	private: Boolean full_table() {
+		Boolean full = true;
+		for (Int64 i = 0; i < this->dataGridView1->Rows->Count - 1 && full; i++)
+			for (Int16 j = 0; j < 5 && full; j++)
+				if (this->dataGridView1->Rows[i]->Cells[j]->Style->BackColor == System::Drawing::Color::LightCyan)
+					full = false;
+		return full;
+	}
+
 	//Проверка является ли символ буквой
 	private: Boolean isalpha_bukva(wchar_t symb) {
 		Boolean result = true;
@@ -798,16 +808,18 @@ namespace Practice {
 			else if (this->toolStripStatusLabel_filename->Text == L"Новый файл")
 				this->dataGridView1->Visible = false;
 
-			this->EnterToolStripMenuItem->Visible = true;
-			this->QuitToolStripMenuItem->Visible = false;
-			this->dataGridView1->BackgroundColor = System::Drawing::Color::Bisque;
-			this->CreateToolStripMenuItem->Enabled = false;
-			this->SaveToolStripMenuItem->Enabled = false;
-			this->SaveAsToolStripMenuItem->Enabled = false;
-			this->CorrectToolStripMenuItem->Enabled = false;
-			this->dataGridView1->AllowUserToAddRows = false;
-			this->dataGridView1->AllowUserToDeleteRows = false;
-			this->dataGridView1->ReadOnly = true;
+			if (full_table() || p->DialogResult == System::Windows::Forms::DialogResult::No) {
+				this->EnterToolStripMenuItem->Visible = true;
+				this->QuitToolStripMenuItem->Visible = false;
+				this->dataGridView1->BackgroundColor = System::Drawing::Color::Bisque;
+				this->CreateToolStripMenuItem->Enabled = false;
+				this->SaveToolStripMenuItem->Enabled = false;
+				this->SaveAsToolStripMenuItem->Enabled = false;
+				this->CorrectToolStripMenuItem->Enabled = false;
+				this->dataGridView1->AllowUserToAddRows = false;
+				this->dataGridView1->AllowUserToDeleteRows = false;
+				this->dataGridView1->ReadOnly = true;
+			}
 		}
 	}
 
@@ -888,25 +900,32 @@ namespace Practice {
 
 	//Сохранение файла при помощи кнопки "Сохранить"
 	private: System::Void SaveToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-		StreamWriter^ sw = gcnew StreamWriter(this->toolStripStatusLabel_filename->Text, false, System::Text::Encoding::GetEncoding(1251));
-		for (Int64 i = 0; i < this->dataGridView1->Rows->Count - 1; i++)
-		{
-			String^ str = this->dataGridView1->Rows[i]->Cells[0]->Value->ToString();
-			for (Int16 j = 1; j < 5; j++)
-				str += ";" + this->dataGridView1->Rows[i]->Cells[j]->Value;
-			sw->WriteLine(str);
+		if (full_table()) {
+			StreamWriter^ sw = gcnew StreamWriter(this->toolStripStatusLabel_filename->Text, false, System::Text::Encoding::GetEncoding(1251));
+			for (Int64 i = 0; i < this->dataGridView1->Rows->Count - 1; i++) {
+				String^ str = this->dataGridView1->Rows[i]->Cells[0]->Value->ToString();
+				for (Int16 j = 1; j < 5; j++)
+					str += ";" + this->dataGridView1->Rows[i]->Cells[j]->Value;
+				sw->WriteLine(str);
+			}
+			sw->Close();
+			this->changes = false;
 		}
-		sw->Close();
-		this->changes = false;
+		else
+			MessageBox::Show(L"Невозможно сохранить файл: в таблице есть пустые ячейки.");
 	}
 
 	//Сохранение файла при помощи кнопки "Сохранить как..."
 	private: System::Void SaveAsToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (this->saveFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
-			this->toolStripStatusLabel_filename->Text = saveFileDialog1->FileName;
-			this->toolStripStatusLabel_filename->Visible = true;
-			SaveToolStripMenuItem_Click(sender, e);
+		if (full_table()) {
+			if (this->saveFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+				this->toolStripStatusLabel_filename->Text = saveFileDialog1->FileName;
+				this->toolStripStatusLabel_filename->Visible = true;
+				SaveToolStripMenuItem_Click(sender, e);
+			}
 		}
+		else
+			MessageBox::Show(L"Невозможно сохранить файл: в таблице есть пустые ячейки.");
 	}
 
 	//Изменение значения в ячейке
