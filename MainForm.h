@@ -592,7 +592,7 @@ namespace Practice {
 	//Закрытие формы
 	private: System::Void MainForm_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
 		//Если выполенен вход в режим администратора и открыт файл
-		if (this->toolStripStatusLabel_filename->Visible && this->QuitToolStripMenuItem->Visible) {
+		if (this->toolStripStatusLabel_filename->Visible && this->QuitToolStripMenuItem->Visible && this->changes) {
 			e->Cancel = true;
 			ExitForm^ p = gcnew ExitForm();
 			p->ShowDialog();
@@ -624,7 +624,7 @@ namespace Practice {
 
 	//Создание файла
 	private: System::Void CreateToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (this->QuitToolStripMenuItem->Visible && this->toolStripStatusLabel_filename->Visible && MessageBox::Show(L"Сохранить изменения?", "", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes) {
+		if (this->QuitToolStripMenuItem->Visible && this->toolStripStatusLabel_filename->Visible && this->changes && MessageBox::Show(L"Сохранить изменения?", "", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes) {
 			if (this->toolStripStatusLabel_filename->Text == L"Новый файл")
 				SaveAsToolStripMenuItem_Click(sender, e);
 			else
@@ -637,7 +637,7 @@ namespace Practice {
 
 	//Открытие файла
 	private: System::Void OpenToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (this->QuitToolStripMenuItem->Visible && this->toolStripStatusLabel_filename->Visible && MessageBox::Show(L"Сохранить изменения?", "", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes) {
+		if (this->QuitToolStripMenuItem->Visible && this->toolStripStatusLabel_filename->Visible && this->changes && MessageBox::Show(L"Сохранить изменения?", "", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes) {
 			if (this->toolStripStatusLabel_filename->Text == L"Новый файл")
 				SaveAsToolStripMenuItem_Click(sender, e);
 			else
@@ -652,6 +652,7 @@ namespace Practice {
 
 	//Открытие файла
 	private: Void open_file() {
+		this->changes = false;
 		Boolean good = true;
 		this->dataGridView1->Rows->Clear();
 
@@ -782,10 +783,10 @@ namespace Practice {
 	//Выход из режима администратора
 	private: System::Void QuitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		ExitForm^ p = gcnew ExitForm();
-		if (this->toolStripStatusLabel_filename->Visible)
+		if (this->toolStripStatusLabel_filename->Visible && this->changes)
 			p->ShowDialog();
 
-		if (!this->toolStripStatusLabel_filename->Visible || p->DialogResult == System::Windows::Forms::DialogResult::No || p->DialogResult == System::Windows::Forms::DialogResult::Yes) {
+		if (!this->toolStripStatusLabel_filename->Visible || !this->changes || p->DialogResult == System::Windows::Forms::DialogResult::No || p->DialogResult == System::Windows::Forms::DialogResult::Yes) {
 			if (p->DialogResult == System::Windows::Forms::DialogResult::Yes) {
 				if (this->toolStripStatusLabel_filename->Visible) {
 					if (this->toolStripStatusLabel_filename->Text == L"Новый файл")
@@ -884,6 +885,7 @@ namespace Practice {
 			sw->WriteLine(str);
 		}
 		sw->Close();
+		this->changes = false;
 	}
 
 	//Сохранение файла при помощи кнопки "Сохранить как..."
@@ -901,6 +903,7 @@ namespace Practice {
 		String^ value;
 
 		if (e->RowIndex != -1) {
+			this->changes = true;
 			if (this->dataGridView1->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value != nullptr) {
 				value = this->dataGridView1->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
 				if (value->Length > 0) {
@@ -981,6 +984,7 @@ namespace Practice {
 		for (Int16 i = 0; i < 5; i++)
 			this->dataGridView1->Rows[this->dataGridView1->Rows->Count - 2]->Cells[i]->Style->BackColor = System::Drawing::Color::LightCyan;
 		this->DelAllRowsToolStripMenuItem->Enabled = true;
+		this->changes = true;
 	}
 
 	//Добавление ряда кнопкой
@@ -995,12 +999,13 @@ namespace Practice {
 		if (MessageBox::Show(L"Вы уверены, что хотите удалить все строки?", "", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes) {
 			this->DelAllRowsToolStripMenuItem->Enabled = false;
 			this->dataGridView1->Rows->Clear();
+			this->changes = true;
 		}
 	}
 
 	//Выбор ряда/рядов
 	private: System::Void dataGridView1_RowStateChanged(System::Object^ sender, System::Windows::Forms::DataGridViewRowStateChangedEventArgs^ e) {
-		Int64 choosed = 0;
+		Int16 choosed = 0;
 		for (Int64 i = 0; i < this->dataGridView1->Rows->Count - 1 && choosed < 2; i++)
 			if (this->dataGridView1->Rows[i]->Selected)
 				choosed += 1;
@@ -1026,6 +1031,7 @@ namespace Practice {
 	private: System::Void dataGridView1_UserDeletedRow(System::Object^ sender, System::Windows::Forms::DataGridViewRowEventArgs^ e) {
 		if (this->dataGridView1->Rows->Count == 1)
 			this->DelAllRowsToolStripMenuItem->Enabled = false;
+		this->changes = true;
 	}
 };
 }
