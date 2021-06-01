@@ -3,6 +3,7 @@
 #include "HelloForm.h"
 #include "ExitForm.h"
 #include "AdminForm.h"
+#include "QueryForm.h"
 
 namespace Practice {
 
@@ -286,9 +287,11 @@ namespace Practice {
 			// 
 			// QueryToolStripMenuItem
 			// 
+			this->QueryToolStripMenuItem->Enabled = false;
 			this->QueryToolStripMenuItem->Name = L"QueryToolStripMenuItem";
 			this->QueryToolStripMenuItem->Size = System::Drawing::Size(99, 34);
 			this->QueryToolStripMenuItem->Text = L"&Запрос";
+			this->QueryToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::QueryToolStripMenuItem_Click);
 			// 
 			// GameToolStripMenuItem
 			// 
@@ -639,10 +642,17 @@ namespace Practice {
 				SaveAsToolStripMenuItem_Click(sender, e);
 			else
 				SaveToolStripMenuItem_Click(sender, e);
+			if (full_table()) {
+				this->toolStripStatusLabel_filename->Text = L"Новый файл";
+				this->toolStripStatusLabel_filename->Visible = true;
+				open_file();
+			}
 		}
-		this->toolStripStatusLabel_filename->Text = L"Новый файл";
-		this->toolStripStatusLabel_filename->Visible = true;
-		open_file();
+		else {
+			this->toolStripStatusLabel_filename->Text = L"Новый файл";
+			this->toolStripStatusLabel_filename->Visible = true;
+			open_file();
+		}
 	}
 
 	//Открытие файла
@@ -652,8 +662,13 @@ namespace Practice {
 				SaveAsToolStripMenuItem_Click(sender, e);
 			else
 				SaveToolStripMenuItem_Click(sender, e);
+			if (full_table() && this->openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+				this->toolStripStatusLabel_filename->Text = this->openFileDialog1->FileName;
+				this->toolStripStatusLabel_filename->Visible = true;
+				open_file();
+			}
 		}
-		if (this->openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+		else if (this->openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 			this->toolStripStatusLabel_filename->Text = this->openFileDialog1->FileName;
 			this->toolStripStatusLabel_filename->Visible = true;
 			open_file();
@@ -672,6 +687,7 @@ namespace Practice {
 			if (lines->Length == 0 && !this->QuitToolStripMenuItem->Visible) {
 				good = false;
 				this->CloseToolStripMenuItem->Enabled = true;
+				this->QueryToolStripMenuItem->Enabled = true;
 				this->dataGridView1->Visible = false;
 				this->label_center->Visible = true;
 				this->label_center->Text = L"Файл пуст";
@@ -745,6 +761,7 @@ namespace Practice {
 			this->dataGridView1->Visible = true;
 			this->label_center->Visible = false;
 			this->CloseToolStripMenuItem->Enabled = true;
+			this->QueryToolStripMenuItem->Enabled = true;
 			if (this->QuitToolStripMenuItem->Visible) {
 				this->SaveAsToolStripMenuItem->Enabled = true;
 				if (this->toolStripStatusLabel_filename->Text != L"Новый файл")
@@ -765,6 +782,7 @@ namespace Practice {
 			this->dataGridView1->Visible = false;
 			this->label_center->Visible = true;
 			this->CloseToolStripMenuItem->Enabled = false;
+			this->QueryToolStripMenuItem->Enabled = false;
 			this->CorrectToolStripMenuItem->Enabled = false;
 			this->label_center->Text = L"Файл не выбран";
 		}
@@ -777,7 +795,7 @@ namespace Practice {
 		p->ShowDialog();
 
 		//Если пароль верный
-		if (p->parol) {
+		if (p->DialogResult == System::Windows::Forms::DialogResult::OK) {
 			MessageBox::Show(L"Вы вошли в режим администратора!");
 			this->QuitToolStripMenuItem->Visible = true;
 			this->EnterToolStripMenuItem->Visible = false;
@@ -889,13 +907,16 @@ namespace Practice {
 
 	//Закрытие файла
 	private: System::Void CloseToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (this->QuitToolStripMenuItem->Visible && MessageBox::Show(L"Сохранить изменения?", "", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes) {
+		if (this->changes && this->QuitToolStripMenuItem->Visible && MessageBox::Show(L"Сохранить изменения?", "", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes) {
 			if (this->toolStripStatusLabel_filename->Text == L"Новый файл")
 				SaveAsToolStripMenuItem_Click(sender, e);
 			else
 				SaveToolStripMenuItem_Click(sender, e);
+			if (full_table())
+				this->toolStripStatusLabel_filename->Visible = false;
 		}
-		this->toolStripStatusLabel_filename->Visible = false;
+		else
+			this->toolStripStatusLabel_filename->Visible = false;
 	}
 
 	//Сохранение файла при помощи кнопки "Сохранить"
@@ -1063,6 +1084,12 @@ namespace Practice {
 		if (this->dataGridView1->Rows->Count == 1)
 			this->DelAllRowsToolStripMenuItem->Enabled = false;
 		this->changes = true;
+	}
+	
+	//Запрос
+	private: System::Void QueryToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		QueryForm^ p = gcnew QueryForm();
+		p->Show();
 	}
 };
 }

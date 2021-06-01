@@ -122,6 +122,7 @@
     <ClCompile Include="ExitForm.cpp" />
     <ClCompile Include="HelloForm.cpp" />
     <ClCompile Include="MainForm.cpp" />
+    <ClCompile Include="QueryForm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdminForm.h">
@@ -134,6 +135,9 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="MainForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="QueryForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
   </ItemGroup>

@@ -15,8 +15,6 @@ namespace Practice {
 	public ref class AdminForm : public System::Windows::Forms::Form
 	{
 	public:
-		Boolean parol;
-
 		AdminForm(void)
 		{
 			InitializeComponent();
@@ -119,6 +117,8 @@ namespace Practice {
 			this->MinimizeBox = false;
 			this->MinimumSize = System::Drawing::Size(690, 180);
 			this->Name = L"AdminForm";
+			this->ShowIcon = false;
+			this->ShowInTaskbar = false;
 			this->SizeGripStyle = System::Windows::Forms::SizeGripStyle::Hide;
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Вход в режим администратора";
@@ -128,6 +128,7 @@ namespace Practice {
 
 		}
 #pragma endregion
+	private: Boolean parol = false;
 	private: System::Void button_ready_Click(System::Object^ sender, System::EventArgs^ e) {
 		if (this->textBox1->Text == "Igra")
 			parol = true;
