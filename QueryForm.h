@@ -112,9 +112,11 @@ namespace Practice {
 	private: System::Windows::Forms::Panel^ panel5;
 	private: System::Windows::Forms::Panel^ panel4;
 	private: System::Windows::Forms::Panel^ panel_name;
+	private: System::Windows::Forms::Label^ label_nothing;
 
 
-	private: System::Windows::Forms::Label^ label3;
+
+
 	private: System::Windows::Forms::TextBox^ textBox_name;
 	private: System::Windows::Forms::TextBox^ textBox_id;
 	private: System::Windows::Forms::TextBox^ textBox_cost;
@@ -122,6 +124,18 @@ namespace Practice {
 
 	private: System::Windows::Forms::TextBox^ textBox_number;
 private: System::Windows::Forms::TextBox^ textBox_age;
+private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_name;
+private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_ID;
+private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_number;
+private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_cost;
+private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
+
+
+
+
+
+
+
 
 
 
@@ -184,7 +198,12 @@ private: System::Windows::Forms::TextBox^ textBox_age;
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->dataGridView1 = (gcnew System::Windows::Forms::DataGridView());
 			this->label_result = (gcnew System::Windows::Forms::Label());
-			this->label3 = (gcnew System::Windows::Forms::Label());
+			this->label_nothing = (gcnew System::Windows::Forms::Label());
+			this->Column_name = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->Column_ID = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->Column_number = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->Column_cost = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->Column_age = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->statusStrip1->SuspendLayout();
 			this->panel_big->SuspendLayout();
 			this->panel6->SuspendLayout();
@@ -199,9 +218,9 @@ private: System::Windows::Forms::TextBox^ textBox_age;
 			// 
 			this->statusStrip1->ImageScalingSize = System::Drawing::Size(28, 28);
 			this->statusStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->toolStripStatusLabel_filename });
-			this->statusStrip1->Location = System::Drawing::Point(0, 1397);
+			this->statusStrip1->Location = System::Drawing::Point(450, 1397);
 			this->statusStrip1->Name = L"statusStrip1";
-			this->statusStrip1->Size = System::Drawing::Size(1406, 39);
+			this->statusStrip1->Size = System::Drawing::Size(956, 39);
 			this->statusStrip1->TabIndex = 0;
 			this->statusStrip1->Text = L"statusStrip1";
 			// 
@@ -224,7 +243,7 @@ private: System::Windows::Forms::TextBox^ textBox_age;
 			this->panel_big->Dock = System::Windows::Forms::DockStyle::Left;
 			this->panel_big->Location = System::Drawing::Point(0, 0);
 			this->panel_big->Name = L"panel_big";
-			this->panel_big->Size = System::Drawing::Size(450, 1397);
+			this->panel_big->Size = System::Drawing::Size(450, 1436);
 			this->panel_big->TabIndex = 1;
 			// 
 			// panel6
@@ -629,21 +648,31 @@ private: System::Windows::Forms::TextBox^ textBox_age;
 			this->button1->TabIndex = 19;
 			this->button1->Text = L"Поиск";
 			this->button1->UseVisualStyleBackColor = false;
+			this->button1->Click += gcnew System::EventHandler(this, &QueryForm::button1_Click);
 			// 
 			// dataGridView1
 			// 
 			this->dataGridView1->AllowUserToAddRows = false;
 			this->dataGridView1->AllowUserToDeleteRows = false;
-			this->dataGridView1->BackgroundColor = System::Drawing::Color::Linen;
+			this->dataGridView1->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::Fill;
+			this->dataGridView1->AutoSizeRowsMode = System::Windows::Forms::DataGridViewAutoSizeRowsMode::AllHeaders;
+			this->dataGridView1->BackgroundColor = System::Drawing::Color::MistyRose;
+			this->dataGridView1->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->dataGridView1->ColumnHeadersBorderStyle = System::Windows::Forms::DataGridViewHeaderBorderStyle::Single;
 			this->dataGridView1->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			this->dataGridView1->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(5) {
+				this->Column_name,
+					this->Column_ID, this->Column_number, this->Column_cost, this->Column_age
+			});
 			this->dataGridView1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->dataGridView1->Location = System::Drawing::Point(450, 64);
 			this->dataGridView1->Name = L"dataGridView1";
 			this->dataGridView1->ReadOnly = true;
-			this->dataGridView1->RowHeadersWidth = 72;
+			this->dataGridView1->RowHeadersWidth = 20;
 			this->dataGridView1->RowTemplate->Height = 31;
 			this->dataGridView1->Size = System::Drawing::Size(956, 1333);
 			this->dataGridView1->TabIndex = 2;
+			this->dataGridView1->Visible = false;
 			// 
 			// label_result
 			// 
@@ -656,26 +685,61 @@ private: System::Windows::Forms::TextBox^ textBox_age;
 			this->label_result->Text = L"Результат запроса";
 			this->label_result->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
-			// label3
+			// label_nothing
 			// 
-			this->label3->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->label3->Location = System::Drawing::Point(450, 64);
-			this->label3->Name = L"label3";
-			this->label3->Size = System::Drawing::Size(956, 1333);
-			this->label3->TabIndex = 4;
-			this->label3->Text = L"Ничего не найдено";
-			this->label3->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			this->label_nothing->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->label_nothing->Location = System::Drawing::Point(450, 64);
+			this->label_nothing->Name = L"label_nothing";
+			this->label_nothing->Size = System::Drawing::Size(956, 1333);
+			this->label_nothing->TabIndex = 4;
+			this->label_nothing->Text = L"Ничего не найдено";
+			this->label_nothing->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			// 
+			// Column_name
+			// 
+			this->Column_name->HeaderText = L"Название игрушки";
+			this->Column_name->MinimumWidth = 9;
+			this->Column_name->Name = L"Column_name";
+			this->Column_name->ReadOnly = true;
+			// 
+			// Column_ID
+			// 
+			this->Column_ID->HeaderText = L"Инвентарный номер";
+			this->Column_ID->MinimumWidth = 9;
+			this->Column_ID->Name = L"Column_ID";
+			this->Column_ID->ReadOnly = true;
+			// 
+			// Column_number
+			// 
+			this->Column_number->HeaderText = L"Количество";
+			this->Column_number->MinimumWidth = 9;
+			this->Column_number->Name = L"Column_number";
+			this->Column_number->ReadOnly = true;
+			// 
+			// Column_cost
+			// 
+			this->Column_cost->HeaderText = L"Цена";
+			this->Column_cost->MinimumWidth = 9;
+			this->Column_cost->Name = L"Column_cost";
+			this->Column_cost->ReadOnly = true;
+			// 
+			// Column_age
+			// 
+			this->Column_age->HeaderText = L"Возраст";
+			this->Column_age->MinimumWidth = 9;
+			this->Column_age->Name = L"Column_age";
+			this->Column_age->ReadOnly = true;
 			// 
 			// QueryForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(11, 24);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1406, 1436);
-			this->Controls->Add(this->label3);
+			this->Controls->Add(this->label_nothing);
 			this->Controls->Add(this->dataGridView1);
 			this->Controls->Add(this->label_result);
-			this->Controls->Add(this->panel_big);
 			this->Controls->Add(this->statusStrip1);
+			this->Controls->Add(this->panel_big);
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->MinimumSize = System::Drawing::Size(300, 1500);
 			this->Name = L"QueryForm";
@@ -744,6 +808,10 @@ private: System::Windows::Forms::TextBox^ textBox_age;
 		this->radioButton_age_less->Enabled = this->checkBox_age->Checked;
 		this->radioButton_age_equal->Enabled = this->checkBox_age->Checked;
 		this->textBox_age->Enabled = this->checkBox_age->Checked;
+	}
+	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+		this->label_nothing->Visible = false;
+		this->dataGridView1->Visible = true;
 	}
 };
 }
