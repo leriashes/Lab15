@@ -566,8 +566,8 @@ namespace Practice {
 			else
 				value = str;
 			
-			if (Convert::ToInt64(value) >= 0 && Convert::ToInt64(value) <= 100)
-				value = Convert::ToString(Convert::ToInt64(value)) + "+";
+			if (Convert::ToInt32(value) >= 0 && Convert::ToInt32(value) <= 100)
+				value = Convert::ToString(Convert::ToInt32(value)) + "+";
 			else
 				value = "";
 		}
@@ -620,6 +620,7 @@ namespace Practice {
 					else
 						SaveToolStripMenuItem_Click(sender, e);
 				}
+				e->Cancel = false;
 			}
 		}
 		else {
@@ -870,14 +871,14 @@ namespace Practice {
 					e->SortResult = 0;
 			}
 			else if (e->Column->Name == "Column_age") {
-				Int64 v1, v2;
+				Int32 v1, v2;
 				String^ va1, ^ va2;
 				for (Int16 i = 0; i < e->CellValue1->ToString()->Length - 1; i++)
 					va1 += e->CellValue1->ToString()[i];
 				for (Int16 i = 0; i < e->CellValue2->ToString()->Length - 1; i++)
 					va2 += e->CellValue2->ToString()[i];
-				v1 = Convert::ToInt64(va1);
-				v2 = Convert::ToInt64(va2);
+				v1 = Convert::ToInt32(va1);
+				v2 = Convert::ToInt32(va2);
 				if (v1 > v2)
 					e->SortResult = 1;
 				else if (v1 < v2)

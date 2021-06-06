@@ -8,6 +8,7 @@ namespace Practice {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::IO;
 
 	/// <summary>
 	/// Сводка для QueryForm
@@ -103,7 +104,8 @@ namespace Practice {
 
 	private: System::Windows::Forms::DataGridView^ dataGridView1;
 	private: System::Windows::Forms::Panel^ panel2;
-	private: System::Windows::Forms::Button^ button1;
+	private: System::Windows::Forms::Button^ button_search;
+
 	private: System::Windows::Forms::Label^ label_criteria;
 	private: System::Windows::Forms::Label^ label_result;
 
@@ -195,15 +197,15 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 			this->radioButton_name_matches = (gcnew System::Windows::Forms::RadioButton());
 			this->radioButton_name_contains = (gcnew System::Windows::Forms::RadioButton());
 			this->label_criteria = (gcnew System::Windows::Forms::Label());
-			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->button_search = (gcnew System::Windows::Forms::Button());
 			this->dataGridView1 = (gcnew System::Windows::Forms::DataGridView());
-			this->label_result = (gcnew System::Windows::Forms::Label());
-			this->label_nothing = (gcnew System::Windows::Forms::Label());
 			this->Column_name = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Column_ID = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Column_number = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Column_cost = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Column_age = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->label_result = (gcnew System::Windows::Forms::Label());
+			this->label_nothing = (gcnew System::Windows::Forms::Label());
 			this->statusStrip1->SuspendLayout();
 			this->panel_big->SuspendLayout();
 			this->panel6->SuspendLayout();
@@ -239,7 +241,7 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 			this->panel_big->Controls->Add(this->panel2);
 			this->panel_big->Controls->Add(this->panel_name);
 			this->panel_big->Controls->Add(this->label_criteria);
-			this->panel_big->Controls->Add(this->button1);
+			this->panel_big->Controls->Add(this->button_search);
 			this->panel_big->Dock = System::Windows::Forms::DockStyle::Left;
 			this->panel_big->Location = System::Drawing::Point(0, 0);
 			this->panel_big->Name = L"panel_big";
@@ -639,16 +641,16 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 			this->label_criteria->Text = L"Критерии поиска";
 			this->label_criteria->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
-			// button1
+			// button_search
 			// 
-			this->button1->BackColor = System::Drawing::Color::GhostWhite;
-			this->button1->Location = System::Drawing::Point(12, 1029);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(425, 57);
-			this->button1->TabIndex = 19;
-			this->button1->Text = L"Поиск";
-			this->button1->UseVisualStyleBackColor = false;
-			this->button1->Click += gcnew System::EventHandler(this, &QueryForm::button1_Click);
+			this->button_search->BackColor = System::Drawing::Color::GhostWhite;
+			this->button_search->Location = System::Drawing::Point(12, 1029);
+			this->button_search->Name = L"button_search";
+			this->button_search->Size = System::Drawing::Size(425, 57);
+			this->button_search->TabIndex = 19;
+			this->button_search->Text = L"Поиск";
+			this->button_search->UseVisualStyleBackColor = false;
+			this->button_search->Click += gcnew System::EventHandler(this, &QueryForm::button_search_Click);
 			// 
 			// dataGridView1
 			// 
@@ -668,32 +670,10 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 			this->dataGridView1->Location = System::Drawing::Point(450, 64);
 			this->dataGridView1->Name = L"dataGridView1";
 			this->dataGridView1->ReadOnly = true;
-			this->dataGridView1->RowHeadersWidth = 20;
+			this->dataGridView1->RowHeadersWidthSizeMode = System::Windows::Forms::DataGridViewRowHeadersWidthSizeMode::AutoSizeToAllHeaders;
 			this->dataGridView1->RowTemplate->Height = 31;
 			this->dataGridView1->Size = System::Drawing::Size(956, 1333);
 			this->dataGridView1->TabIndex = 2;
-			this->dataGridView1->Visible = false;
-			// 
-			// label_result
-			// 
-			this->label_result->BackColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label_result->Dock = System::Windows::Forms::DockStyle::Top;
-			this->label_result->Location = System::Drawing::Point(450, 0);
-			this->label_result->Name = L"label_result";
-			this->label_result->Size = System::Drawing::Size(956, 64);
-			this->label_result->TabIndex = 3;
-			this->label_result->Text = L"Результат запроса";
-			this->label_result->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
-			// 
-			// label_nothing
-			// 
-			this->label_nothing->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->label_nothing->Location = System::Drawing::Point(450, 64);
-			this->label_nothing->Name = L"label_nothing";
-			this->label_nothing->Size = System::Drawing::Size(956, 1333);
-			this->label_nothing->TabIndex = 4;
-			this->label_nothing->Text = L"Ничего не найдено";
-			this->label_nothing->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// Column_name
 			// 
@@ -729,6 +709,28 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 			this->Column_age->MinimumWidth = 9;
 			this->Column_age->Name = L"Column_age";
 			this->Column_age->ReadOnly = true;
+			// 
+			// label_result
+			// 
+			this->label_result->BackColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label_result->Dock = System::Windows::Forms::DockStyle::Top;
+			this->label_result->Location = System::Drawing::Point(450, 0);
+			this->label_result->Name = L"label_result";
+			this->label_result->Size = System::Drawing::Size(956, 64);
+			this->label_result->TabIndex = 3;
+			this->label_result->Text = L"Результат запроса";
+			this->label_result->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			// 
+			// label_nothing
+			// 
+			this->label_nothing->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->label_nothing->Location = System::Drawing::Point(450, 64);
+			this->label_nothing->Name = L"label_nothing";
+			this->label_nothing->Size = System::Drawing::Size(956, 1333);
+			this->label_nothing->TabIndex = 4;
+			this->label_nothing->Text = L"Ничего не найдено";
+			this->label_nothing->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			this->label_nothing->Visible = false;
 			// 
 			// QueryForm
 			// 
@@ -774,6 +776,7 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 			//if (filename[i] != '*')
 			file = filename[i] + file;
 		this->Text += file;
+		button_search_Click(sender, e);
 	}
 	private: System::Void checkBox_name_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 		this->radioButton_name_matches->Enabled = this->checkBox_name->Checked;
@@ -809,9 +812,252 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 		this->radioButton_age_equal->Enabled = this->checkBox_age->Checked;
 		this->textBox_age->Enabled = this->checkBox_age->Checked;
 	}
-	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-		this->label_nothing->Visible = false;
-		this->dataGridView1->Visible = true;
+
+	//Проверка является ли символ буквой
+	private: Boolean isalpha_bukva(wchar_t symb) {
+		Boolean result = true;
+
+		if (symb < 'A' || symb > 'Z' && symb < 'a' || symb > 'z' && symb < L'А' && symb != L'Ё' || symb > L'я' && symb != L'ё')
+			result = false;
+		return result;
+	}
+
+	//Проверка является ли символ цифрой
+	private: Boolean isdigit_ziphra(wchar_t symb) {
+		Boolean result = true;
+
+		if (symb < '0' || symb > '9')
+			result = false;
+		return result;
+	}
+
+	//Проверка ячейки (1, 3-5)
+	private: Boolean check_value(String^ value, Int16 mode) {
+		Boolean good = true;
+
+		switch (mode) {
+		//Проверка ячейки 1
+		case 0:
+			for (Int16 i = 0; i < value->Length && good; i++)
+				if (!isalpha_bukva(value[i]) && value[i] != ' ' || value[i] == ' ' && i == 0)
+					good = false;
+			break;
+		//Проверка ячейки 3
+		case 2:
+			for (Int16 i = 0; i < value->Length && good; i++)
+				if (!isdigit_ziphra(value[i]))
+					good = false;
+			break;
+		//Проверка ячейки 4
+		case 3:
+			for (Int16 i = 0, p = 0; i < value->Length && good; i++) {
+				if (value[i] == ',')
+					p += 1;
+
+				if (p != 1 && !isdigit_ziphra(value[i]) || p > 1 || p == 1 && value[i] == ',' && value->Length - i != 2 && value->Length - i != 3 && i > 0)
+					good = false;
+			}
+
+			if (good && Convert::ToDouble(value) == 0)
+				good = false;
+			break;
+		//Проверка ячейки 5
+		case 4:
+			for (Int16 i = 0; i < value->Length - 1 && good; i++)
+				if (!isdigit_ziphra(value[i]))
+					good = false;
+
+			if (good && value[value->Length - 1] != '+' && !isdigit_ziphra(value[value->Length - 1]))
+				good = false;
+
+			if (good && value_format(value, 4) == "")
+				good = false;
+			break;
+		default:
+			good = false;
+			break;
+		}
+
+		return good;
+	}
+
+	//Проверка ячейки (2)
+	private: Boolean check_value(String^ id, String^ name, Int64 row) {
+		Boolean good = true;
+
+		if (id->Length != 6 || id[0] != name[0] && id[0] != name[0] - 32 && (id[0] != L'Ё' || id[0] != name[0] - 80) || id[1] != '-')
+			good = false;
+
+		for (Int16 i = 0; i < 4 && good; i++)
+			if (!isdigit_ziphra(id[2 + i]))
+				good = false;
+
+		for (Int64 i = 0; i < this->dataGridView1->Rows->Count && good; i++)
+			if (this->dataGridView1->Rows[i]->Cells[1]->Value != nullptr && this->dataGridView1->Rows[i]->Cells[1]->Value->ToString() == id && i != row)
+				good = false;
+
+		return good;
+	}
+
+	//Форматирование значения ячейки
+	private: String^ value_format(String^ str, Int16 mode) {
+		String^ value = "";
+
+		//Для ячейки 4
+		if (mode == 3) {
+			value = Convert::ToString(Convert::ToDouble(str));
+			if (value->Length > 2 && value[value->Length - 2] == ',')
+				value += "0";
+			else if (value->Length < 3 || value[value->Length - 3] != ',')
+				value += ",00";
+		}
+		//Для ячейки 5
+		else if (mode == 4) {
+			if (str[str->Length - 1] == '+')
+				for (Int16 i = 0; i < str->Length - 1; i++)
+					value += str[i];
+			else
+				value = str;
+
+			if (Convert::ToInt64(value) >= 0 && Convert::ToInt64(value) <= 100)
+				value = Convert::ToString(Convert::ToInt64(value)) + "+";
+			else
+				value = "";
+		}
+
+		return value;
+	}
+
+	private: System::Void button_search_Click(System::Object^ sender, System::EventArgs^ e) {
+		Boolean good = true;
+		this->dataGridView1->Rows->Clear();
+		array<String^>^ lines = File::ReadAllLines(this->toolStripStatusLabel_filename->Text, System::Text::Encoding::GetEncoding(1251));
+		
+		//Если файл пуст
+		if (lines->Length == 0)
+			good = false;
+		//Если файл не пустой
+		else {
+			for each (String ^ str in lines) {
+				DataGridViewRow^ row = gcnew DataGridViewRow();
+				row->CreateCells(this->dataGridView1);
+				array<String^>^ splittedstr = str->Split(L';');
+
+				//Если количество пунктов в строке не удовлетворяет нужному количеству
+				if (splittedstr->Length != 5) {
+					good = false;
+					break;
+				}
+				else
+				{
+					for (Int16 i = 0; i < 2; i++)
+						row->Cells[i]->Value = splittedstr[i];
+
+					//Проверка первого столбца
+					if (good = check_value(splittedstr[0], 0))
+						//Проверка второго столбца
+						if (good = check_value(splittedstr[1], splittedstr[0], this->dataGridView1->Rows->Count))
+							//Проверка третьего столбца
+							if (good = check_value(splittedstr[2], 2)) {
+								row->Cells[2]->Value = Convert::ToString(Convert::ToInt64(splittedstr[2]));
+								//Проверка четвёртого столбца
+								if (good = check_value(splittedstr[3], 3)) {
+									row->Cells[3]->Value = value_format(splittedstr[3], 3);
+									//Проверка пятого столбца
+									if (good = check_value(splittedstr[4], 4)) {
+										row->Cells[4]->Value = value_format(splittedstr[4], 4);
+										this->dataGridView1->Rows->Add(row);
+									}
+								}
+							}
+
+					if (!good)
+						break;
+				}
+
+				//Если содержимое файла не удовлетворяет нужному формату
+				if (!good)
+					MessageBox::Show(L"Содержимое файла не удовлетворяет формату.");
+			}
+		}
+
+		if (good) {
+			Int64 n = this->dataGridView1->Rows->Count;
+
+			for (int i = 0; i < this->dataGridView1->Rows->Count && good; i++) {
+				if (this->checkBox_name->Checked) {
+					if (this->textBox_name->Text == "")
+						good = false;
+					else if (this->radioButton_name_matches->Checked && this->textBox_name->Text != this->dataGridView1->Rows[i]->Cells[0]->Value->ToString() || this->radioButton_name_contains->Checked && !(this->dataGridView1->Rows[i]->Cells[0]->Value->ToString()->Contains(this->textBox_name->Text))) {
+						this->dataGridView1->Rows[i]->Visible = false;
+						n--;
+					}
+				}
+
+				if (this->checkBox_id->Checked) {
+					if (this->textBox_id->Text == "")
+						good = false;
+					else if (this->dataGridView1->Rows[i]->Visible && (this->radioButton_id_matches->Checked && this->textBox_id->Text != this->dataGridView1->Rows[i]->Cells[1]->Value->ToString() || this->radioButton_id_contains->Checked && !(this->dataGridView1->Rows[i]->Cells[1]->Value->ToString()->Contains(this->textBox_id->Text)))) {
+						this->dataGridView1->Rows[i]->Visible = false;
+						n--;
+					}
+				}
+
+				if (this->checkBox_number->Checked) {
+					if (this->textBox_number->Text == "" || !check_value(this->textBox_number->Text, 2))
+						good = false;
+					else if (this->dataGridView1->Rows[i]->Visible) {
+						Int32 num1 = Convert::ToInt32(this->textBox_number->Text);
+						Int32 num2 = Convert::ToInt32(this->dataGridView1->Rows[i]->Cells[2]->Value->ToString());
+						if (this->radioButton_number_moeq->Checked && num1 > num2 || this->radioButton_number_more->Checked && num1 >= num2 || this->radioButton_number_leeq->Checked && num1 < num2 || this->radioButton_number_less->Checked && num1 <= num2 || this->radioButton_number_equal->Checked && num1 != num2) {
+							this->dataGridView1->Rows[i]->Visible = false;
+							n--;
+						}
+					}
+				}
+
+				if (this->checkBox_cost->Checked) {
+					if (this->textBox_cost->Text == "" || !check_value(this->textBox_cost->Text, 2) && !check_value(this->textBox_cost->Text, 3))
+						good = false;
+					else if (this->dataGridView1->Rows[i]->Visible) {
+						Double cost1 = Convert::ToDouble(this->textBox_cost->Text);
+						Double cost2 = Convert::ToDouble(this->dataGridView1->Rows[i]->Cells[3]->Value->ToString());
+						if (this->radioButton_cost_moeq->Checked && cost1 > cost2 || this->radioButton_cost_more->Checked && cost1 >= cost2 || this->radioButton_cost_leeq->Checked && cost1 < cost2 || this->radioButton_cost_less->Checked && cost1 <= cost2 || this->radioButton_cost_equal->Checked && cost1 != cost2) {
+							this->dataGridView1->Rows[i]->Visible = false;
+							n--;
+						}
+					}
+				}
+
+				if (this->checkBox_age->Checked) {
+					if (this->textBox_age->Text == "" || !check_value(this->textBox_age->Text, 4))
+						good = false;
+					else if (this->dataGridView1->Rows[i]->Visible) {
+						String^ sage1 = "", ^ sage2 = "";
+						if (this->textBox_age->Text[this->textBox_age->Text->Length - 1] == '+')
+							for (Int16 j = 0; j < this->textBox_age->Text->Length - 1; j++)
+								sage1 += this->textBox_age->Text[j];
+						else
+							sage1 = this->textBox_age->Text;
+
+						for (Int16 j = 0; j < this->dataGridView1->Rows[i]->Cells[4]->Value->ToString()->Length - 1; j++)
+							sage2 += this->dataGridView1->Rows[i]->Cells[4]->Value->ToString()[j];
+						Int32 age1 = Convert::ToInt32(sage1);
+						Int32 age2 = Convert::ToInt32(sage2);
+						if (this->radioButton_age_moeq->Checked && age1 > age2 || this->radioButton_age_more->Checked && age1 >= age2 || this->radioButton_age_leeq->Checked && age1 < age2 || this->radioButton_age_less->Checked && age1 <= age2 || this->radioButton_age_equal->Checked && age1 != age2) {
+							this->dataGridView1->Rows[i]->Visible = false;
+							n--;
+						}
+					}
+				}
+			}
+
+			if (n == 0)
+				good = false;
+		}
+
+		this->dataGridView1->Visible = good;
+		this->label_nothing->Visible = !good;
 	}
 };
 }
