@@ -140,6 +140,7 @@
     <ClInclude Include="QueryForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AdminForm.resx">
@@ -157,6 +158,12 @@
     <EmbeddedResource Include="QueryForm.resx">
       <DependentUpon>QueryForm.h</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Practice.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\OneDrive\Desktop\ПИ-01 Шевченко Курсовой проект\animal_toy_stuffedanimal_doll_cat_dog_2744.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
