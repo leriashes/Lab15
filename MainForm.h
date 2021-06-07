@@ -453,126 +453,11 @@ namespace Practice {
 	//Проверка на наличие пустых ячеек в файле
 	private: Boolean full_table() {
 		Boolean full = true;
-		for (Int64 i = 0; i < this->dataGridView1->Rows->Count - 1 && full; i++)
+		for (Int32 i = 0; i < this->dataGridView1->Rows->Count - 1 && full; i++)
 			for (Int16 j = 0; j < 5 && full; j++)
 				if (this->dataGridView1->Rows[i]->Cells[j]->Style->BackColor == System::Drawing::Color::LightCyan)
 					full = false;
 		return full;
-	}
-
-	//Проверка является ли символ буквой
-	private: Boolean isalpha_bukva(wchar_t symb) {
-		Boolean result = true;
-
-		if (symb < 'A' || symb > 'Z' && symb < 'a' || symb > 'z' && symb < L'А' && symb != L'Ё' || symb > L'я' && symb != L'ё')
-			result = false;
-		return result;
-	}
-
-	//Проверка является ли символ цифрой
-	private: Boolean isdigit_ziphra(wchar_t symb) {
-		Boolean result = true;
-
-		if (symb < '0' || symb > '9')
-			result = false;
-		return result;
-	}
-
-	//Проверка ячейки (1, 3-5)
-	private: Boolean check_value(String^ value, Int16 mode) {
-		Boolean good = true;
-
-		switch (mode) {
-		//Проверка ячейки 1
-		case 0:
-			for (Int16 i = 0; i < value->Length && good; i++)
-				if (!isalpha_bukva(value[i]) && value[i] != ' ' || value[i] == ' ' && i == 0)
-					good = false;
-			break;
-		//Проверка ячейки 3
-		case 2:
-			for (Int16 i = 0; i < value->Length && good; i++)
-				if (!isdigit_ziphra(value[i]))
-					good = false;
-			break;
-		//Проверка ячейки 4
-		case 3:
-			for (Int16 i = 0, p = 0; i < value->Length && good; i++) {
-				if (value[i] == ',')
-					p += 1;
-
-				if (p != 1 && !isdigit_ziphra(value[i]) || p > 1 || p == 1 && value[i] == ',' && value->Length - i != 2 && value->Length - i != 3 && i > 0)
-					good = false;
-			}
-
-			if (good && Convert::ToDouble(value) == 0)
-				good = false;
-			break;
-		//Проверка ячейки 5
-		case 4:
-			for (Int16 i = 0; i < value->Length - 1 && good; i++)
-				if (!isdigit_ziphra(value[i]))
-					good = false;
-
-			if (good && value[value->Length - 1] != '+' && !isdigit_ziphra(value[value->Length - 1]))
-				good = false;
-
-			if (good && value_format(value, 4) == "")
-				good = false;
-			break;
-		default:
-			good = false;
-			break;
-		}
-		
-		return good;
-	}
-
-	//Проверка ячейки (2)
-	private: Boolean check_value(String^ id, String^ name, Int64 row) {
-		Boolean good = true;
-
-		if (id->Length != 6 || id[0] != name[0] && id[0] != name[0] - 32 && (id[0] != L'Ё' || id[0] != name[0] - 80) || id[1] != '-')
-			good = false;
-
-		for (Int16 i = 0; i < 4 && good; i++)
-			if (!isdigit_ziphra(id[2 + i]))
-				good = false;
-
-		for (Int64 i = 0; i < this->dataGridView1->Rows->Count && good; i++)
-			if (this->dataGridView1->Rows[i]->Cells[1]->Value != nullptr && this->dataGridView1->Rows[i]->Cells[1]->Value->ToString() == id && i != row)
-				good = false;
-
-		return good;
-	}
-	
-	//Форматирование значения ячейки
-	private: String^ value_format(String^ str, Int16 mode) {
-		String^ value = "";
-		
-		//Для ячейки 4
-		if (mode == 3) {
-			value = Convert::ToString(Convert::ToDouble(str));
-			if (value->Length > 2 && value[value->Length - 2] == ',')
-				value += "0";
-			else if (value->Length < 3 || value[value->Length - 3] != ',')
-				value += ",00";
-		}
-		//Для ячейки 5
-		else if (mode == 4) {
-			if (str[str->Length - 1] == '+')
-				for (Int16 i = 0; i < str->Length - 1; i++)
-					value += str[i];
-			else
-				value = str;
-			
-			if (Convert::ToInt32(value) >= 0 && Convert::ToInt32(value) <= 100)
-				value = Convert::ToString(Convert::ToInt32(value)) + "+";
-			else
-				value = "";
-		}
-
-		return value;
 	}
 
 	//Запуск программы
@@ -714,7 +599,7 @@ namespace Practice {
 						//Проверка первого столбца
 						if (good = check_value(splittedstr[0], 0))
 							//Проверка второго столбца
-							if (good = check_value(splittedstr[1], splittedstr[0], this->dataGridView1->Rows->Count))
+							if (good = check_value(splittedstr[1], splittedstr[0], this->dataGridView1->Rows->Count, this->dataGridView1))
 								//Проверка третьего столбца
 								if (good = check_value(splittedstr[2], 2)) {
 									row->Cells[2]->Value = Convert::ToString(Convert::ToInt64(splittedstr[2]));
@@ -769,7 +654,8 @@ namespace Practice {
 				if (this->toolStripStatusLabel_filename->Text != L"Новый файл")
 					this->SaveToolStripMenuItem->Enabled = true;
 				this->CorrectToolStripMenuItem->Enabled = true;
-				if (this->dataGridView1->Rows->Count > 1)
+				//String^ a = this->dataGridView1->Rows[this->dataGridView1->Rows->Count - 1]->Cells[0]->ToString();
+				if (this->dataGridView1->Rows->Count > 1 || this->dataGridView1->Rows->Count == 1 && this->dataGridView1->Rows[this->dataGridView1->Rows->Count - 1]->Cells[0]->Value != nullptr)
 					this->DelAllRowsToolStripMenuItem->Enabled = true;
 				else {
 					this->DelAllRowsToolStripMenuItem->Enabled = false;
@@ -927,7 +813,7 @@ namespace Practice {
 	private: System::Void SaveToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		if (full_table()) {
 			StreamWriter^ sw = gcnew StreamWriter(this->toolStripStatusLabel_filename->Text, false, System::Text::Encoding::GetEncoding(1251));
-			for (Int64 i = 0; i < this->dataGridView1->Rows->Count - 1; i++) {
+			for (Int32 i = 0; i < this->dataGridView1->Rows->Count - 1; i++) {
 				String^ str = this->dataGridView1->Rows[i]->Cells[0]->Value->ToString();
 				for (Int16 j = 1; j < 5; j++)
 					str += ";" + this->dataGridView1->Rows[i]->Cells[j]->Value;
@@ -971,7 +857,7 @@ namespace Practice {
 					if (e->ColumnIndex != 1)
 						good = check_value(value, e->ColumnIndex);
 					else
-						good = check_value(value, this->dataGridView1->Rows[e->RowIndex]->Cells[0]->Value->ToString(), e->RowIndex);
+						good = check_value(value, this->dataGridView1->Rows[e->RowIndex]->Cells[0]->Value->ToString(), e->RowIndex, this->dataGridView1);
 
 					switch (e->ColumnIndex) {
 					case 0:
@@ -1067,7 +953,7 @@ namespace Practice {
 	//Выбор ряда/рядов
 	private: System::Void dataGridView1_RowStateChanged(System::Object^ sender, System::Windows::Forms::DataGridViewRowStateChangedEventArgs^ e) {
 		Int16 choosed = 0;
-		for (Int64 i = 0; i < this->dataGridView1->Rows->Count - 1 && choosed < 2; i++)
+		for (Int32 i = 0; i < this->dataGridView1->Rows->Count - 1 && choosed < 2; i++)
 			if (this->dataGridView1->Rows[i]->Selected)
 				choosed += 1;
 
@@ -1083,7 +969,7 @@ namespace Practice {
 
 	//Удаление ряда/рядов
 	private: System::Void DelRowToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-		for (Int64 i = 0; i < this->dataGridView1->Rows->Count - 1; i++)
+		for (Int32 i = 0; i < this->dataGridView1->Rows->Count - 1; i++)
 			if (this->dataGridView1->Rows[i]->Selected)
 				this->dataGridView1->Rows->Remove(this->dataGridView1->Rows[i]);
 		System::Windows::Forms::DataGridViewRowEventArgs^ d;

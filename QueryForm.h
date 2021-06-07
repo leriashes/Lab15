@@ -1,5 +1,7 @@
 #pragma once
-
+System::Boolean check_value(System::String^ value, System::Int16 mode);
+System::Boolean check_value(System::String^ id, System::String^ name, System::Int64 row, System::Windows::Forms::DataGridView^ table);
+System::String^ value_format(System::String^ str, System::Int16 mode);
 namespace Practice {
 
 	using namespace System;
@@ -15,6 +17,7 @@ namespace Practice {
 	/// </summary>
 	public ref class QueryForm : public System::Windows::Forms::Form
 	{
+
 	public:
 		QueryForm(void)
 		{
@@ -220,7 +223,7 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 			// 
 			this->statusStrip1->ImageScalingSize = System::Drawing::Size(28, 28);
 			this->statusStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->toolStripStatusLabel_filename });
-			this->statusStrip1->Location = System::Drawing::Point(450, 1397);
+			this->statusStrip1->Location = System::Drawing::Point(450, 1425);
 			this->statusStrip1->Name = L"statusStrip1";
 			this->statusStrip1->Size = System::Drawing::Size(956, 39);
 			this->statusStrip1->TabIndex = 0;
@@ -245,7 +248,7 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 			this->panel_big->Dock = System::Windows::Forms::DockStyle::Left;
 			this->panel_big->Location = System::Drawing::Point(0, 0);
 			this->panel_big->Name = L"panel_big";
-			this->panel_big->Size = System::Drawing::Size(450, 1436);
+			this->panel_big->Size = System::Drawing::Size(450, 1464);
 			this->panel_big->TabIndex = 1;
 			// 
 			// panel6
@@ -672,8 +675,9 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 			this->dataGridView1->ReadOnly = true;
 			this->dataGridView1->RowHeadersWidthSizeMode = System::Windows::Forms::DataGridViewRowHeadersWidthSizeMode::AutoSizeToAllHeaders;
 			this->dataGridView1->RowTemplate->Height = 31;
-			this->dataGridView1->Size = System::Drawing::Size(956, 1333);
+			this->dataGridView1->Size = System::Drawing::Size(956, 1361);
 			this->dataGridView1->TabIndex = 2;
+			this->dataGridView1->SortCompare += gcnew System::Windows::Forms::DataGridViewSortCompareEventHandler(this, &QueryForm::dataGridView1_SortCompare);
 			// 
 			// Column_name
 			// 
@@ -726,7 +730,7 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 			this->label_nothing->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->label_nothing->Location = System::Drawing::Point(450, 64);
 			this->label_nothing->Name = L"label_nothing";
-			this->label_nothing->Size = System::Drawing::Size(956, 1333);
+			this->label_nothing->Size = System::Drawing::Size(956, 1361);
 			this->label_nothing->TabIndex = 4;
 			this->label_nothing->Text = L"Ничего не найдено";
 			this->label_nothing->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
@@ -736,14 +740,14 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(11, 24);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1406, 1436);
+			this->ClientSize = System::Drawing::Size(1406, 1464);
 			this->Controls->Add(this->label_nothing);
 			this->Controls->Add(this->dataGridView1);
 			this->Controls->Add(this->label_result);
 			this->Controls->Add(this->statusStrip1);
 			this->Controls->Add(this->panel_big);
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
-			this->MinimumSize = System::Drawing::Size(300, 1500);
+			this->MinimumSize = System::Drawing::Size(1000, 1528);
 			this->Name = L"QueryForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Запрос - ";
@@ -769,6 +773,8 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 		}
 #pragma endregion
 	private: String^ filename;
+
+	//Открытие формы
 	private: System::Void QueryForm_Load(System::Object^ sender, System::EventArgs^ e) {
 		this->toolStripStatusLabel_filename->Text = filename;
 		String^ file;
@@ -778,16 +784,22 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 		this->Text += file;
 		button_search_Click(sender, e);
 	}
+	
+	//Критерий "Название игрушки" выбран или выбор снят
 	private: System::Void checkBox_name_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 		this->radioButton_name_matches->Enabled = this->checkBox_name->Checked;
 		this->radioButton_name_contains->Enabled = this->checkBox_name->Checked;
 		this->textBox_name->Enabled = this->checkBox_name->Checked;
 	}
+	
+	//Критерий "Инвентарный номер" выбран или выбор снят
 	private: System::Void checkBox_id_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 		this->radioButton_id_matches->Enabled = this->checkBox_id->Checked;
 		this->radioButton_id_contains->Enabled = this->checkBox_id->Checked;
 		this->textBox_id->Enabled = this->checkBox_id->Checked;
 	}
+	
+	//Критерий "Количество" выбран или выбор снят
 	private: System::Void checkBox_number_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 		this->radioButton_number_moeq->Enabled = this->checkBox_number->Checked;
 		this->radioButton_number_more->Enabled = this->checkBox_number->Checked;
@@ -796,6 +808,8 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 		this->radioButton_number_equal->Enabled = this->checkBox_number->Checked;
 		this->textBox_number->Enabled = this->checkBox_number->Checked;
 	}
+
+	//Критерий "Цена" выбран или выбор снят
 	private: System::Void checkBox_cost_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 		this->radioButton_cost_moeq->Enabled = this->checkBox_cost->Checked;
 		this->radioButton_cost_more->Enabled = this->checkBox_cost->Checked;
@@ -804,6 +818,8 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 		this->radioButton_cost_equal->Enabled = this->checkBox_cost->Checked;
 		this->textBox_cost->Enabled = this->checkBox_cost->Checked;
 	}
+
+	//Критерий "Возраст" выбран или выбор снят
 	private: System::Void checkBox_age_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 		this->radioButton_age_moeq->Enabled = this->checkBox_age->Checked;
 		this->radioButton_age_more->Enabled = this->checkBox_age->Checked;
@@ -813,121 +829,65 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 		this->textBox_age->Enabled = this->checkBox_age->Checked;
 	}
 
-	//Проверка является ли символ буквой
-	private: Boolean isalpha_bukva(wchar_t symb) {
-		Boolean result = true;
-
-		if (symb < 'A' || symb > 'Z' && symb < 'a' || symb > 'z' && symb < L'А' && symb != L'Ё' || symb > L'я' && symb != L'ё')
-			result = false;
-		return result;
-	}
-
-	//Проверка является ли символ цифрой
-	private: Boolean isdigit_ziphra(wchar_t symb) {
-		Boolean result = true;
-
-		if (symb < '0' || symb > '9')
-			result = false;
-		return result;
-	}
-
-	//Проверка ячейки (1, 3-5)
-	private: Boolean check_value(String^ value, Int16 mode) {
-		Boolean good = true;
-
-		switch (mode) {
-		//Проверка ячейки 1
-		case 0:
-			for (Int16 i = 0; i < value->Length && good; i++)
-				if (!isalpha_bukva(value[i]) && value[i] != ' ' || value[i] == ' ' && i == 0)
-					good = false;
-			break;
-		//Проверка ячейки 3
-		case 2:
-			for (Int16 i = 0; i < value->Length && good; i++)
-				if (!isdigit_ziphra(value[i]))
-					good = false;
-			break;
-		//Проверка ячейки 4
-		case 3:
-			for (Int16 i = 0, p = 0; i < value->Length && good; i++) {
-				if (value[i] == ',')
-					p += 1;
-
-				if (p != 1 && !isdigit_ziphra(value[i]) || p > 1 || p == 1 && value[i] == ',' && value->Length - i != 2 && value->Length - i != 3 && i > 0)
-					good = false;
+	//Сортировка в столбцах
+	private: System::Void dataGridView1_SortCompare(System::Object^ sender, System::Windows::Forms::DataGridViewSortCompareEventArgs^ e) {
+		if (e->CellValue1 != nullptr && e->CellValue2 != nullptr) {
+			if (e->Column->Name == "Column_number") {
+				Int64 v1, v2;
+				v1 = Convert::ToInt64(e->CellValue1);
+				v2 = Convert::ToInt64(e->CellValue2);
+				if (v1 > v2)
+					e->SortResult = 1;
+				else if (v1 < v2)
+					e->SortResult = -1;
+				else
+					e->SortResult = 0;
 			}
-
-			if (good && Convert::ToDouble(value) == 0)
-				good = false;
-			break;
-		//Проверка ячейки 5
-		case 4:
-			for (Int16 i = 0; i < value->Length - 1 && good; i++)
-				if (!isdigit_ziphra(value[i]))
-					good = false;
-
-			if (good && value[value->Length - 1] != '+' && !isdigit_ziphra(value[value->Length - 1]))
-				good = false;
-
-			if (good && value_format(value, 4) == "")
-				good = false;
-			break;
-		default:
-			good = false;
-			break;
-		}
-
-		return good;
-	}
-
-	//Проверка ячейки (2)
-	private: Boolean check_value(String^ id, String^ name, Int64 row) {
-		Boolean good = true;
-
-		if (id->Length != 6 || id[0] != name[0] && id[0] != name[0] - 32 && (id[0] != L'Ё' || id[0] != name[0] - 80) || id[1] != '-')
-			good = false;
-
-		for (Int16 i = 0; i < 4 && good; i++)
-			if (!isdigit_ziphra(id[2 + i]))
-				good = false;
-
-		for (Int64 i = 0; i < this->dataGridView1->Rows->Count && good; i++)
-			if (this->dataGridView1->Rows[i]->Cells[1]->Value != nullptr && this->dataGridView1->Rows[i]->Cells[1]->Value->ToString() == id && i != row)
-				good = false;
-
-		return good;
-	}
-
-	//Форматирование значения ячейки
-	private: String^ value_format(String^ str, Int16 mode) {
-		String^ value = "";
-
-		//Для ячейки 4
-		if (mode == 3) {
-			value = Convert::ToString(Convert::ToDouble(str));
-			if (value->Length > 2 && value[value->Length - 2] == ',')
-				value += "0";
-			else if (value->Length < 3 || value[value->Length - 3] != ',')
-				value += ",00";
-		}
-		//Для ячейки 5
-		else if (mode == 4) {
-			if (str[str->Length - 1] == '+')
-				for (Int16 i = 0; i < str->Length - 1; i++)
-					value += str[i];
+			else if (e->Column->Name == "Column_cost") {
+				Double v1, v2;
+				v1 = Convert::ToDouble(e->CellValue1);
+				v2 = Convert::ToDouble(e->CellValue2);
+				if (v1 > v2)
+					e->SortResult = 1;
+				else if (v1 < v2)
+					e->SortResult = -1;
+				else
+					e->SortResult = 0;
+			}
+			else if (e->Column->Name == "Column_age") {
+				Int32 v1, v2;
+				String^ va1, ^ va2;
+				for (Int16 i = 0; i < e->CellValue1->ToString()->Length - 1; i++)
+					va1 += e->CellValue1->ToString()[i];
+				for (Int16 i = 0; i < e->CellValue2->ToString()->Length - 1; i++)
+					va2 += e->CellValue2->ToString()[i];
+				v1 = Convert::ToInt32(va1);
+				v2 = Convert::ToInt32(va2);
+				if (v1 > v2)
+					e->SortResult = 1;
+				else if (v1 < v2)
+					e->SortResult = -1;
+				else
+					e->SortResult = 0;
+			}
 			else
-				value = str;
-
-			if (Convert::ToInt64(value) >= 0 && Convert::ToInt64(value) <= 100)
-				value = Convert::ToString(Convert::ToInt64(value)) + "+";
-			else
-				value = "";
+				e->SortResult = System::String::Compare(
+					e->CellValue1->ToString(), e->CellValue2->ToString());
 		}
-
-		return value;
+		else {
+			if (e->CellValue1 == nullptr) {
+				if (e->CellValue2 == nullptr)
+					e->SortResult = 0;
+				else
+					e->SortResult = -1;
+			}
+			else
+				e->SortResult = 1;
+		}
+		e->Handled = true;
 	}
 
+	//Создание запроса
 	private: System::Void button_search_Click(System::Object^ sender, System::EventArgs^ e) {
 		Boolean good = true;
 		this->dataGridView1->Rows->Clear();
@@ -956,7 +916,7 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 					//Проверка первого столбца
 					if (good = check_value(splittedstr[0], 0))
 						//Проверка второго столбца
-						if (good = check_value(splittedstr[1], splittedstr[0], this->dataGridView1->Rows->Count))
+						if (good = check_value(splittedstr[1], splittedstr[0], this->dataGridView1->Rows->Count, this->dataGridView1))
 							//Проверка третьего столбца
 							if (good = check_value(splittedstr[2], 2)) {
 								row->Cells[2]->Value = Convert::ToString(Convert::ToInt64(splittedstr[2]));
@@ -1017,7 +977,7 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 				}
 
 				if (this->checkBox_cost->Checked) {
-					if (this->textBox_cost->Text == "" || !check_value(this->textBox_cost->Text, 2) && !check_value(this->textBox_cost->Text, 3))
+					if (this->textBox_cost->Text == "" || !check_value(this->textBox_cost->Text, 2) && !check_value(this->textBox_cost->Text, 3) && this->textBox_cost->Text != "0,00")
 						good = false;
 					else if (this->dataGridView1->Rows[i]->Visible) {
 						Double cost1 = Convert::ToDouble(this->textBox_cost->Text);
