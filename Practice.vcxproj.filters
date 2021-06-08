@@ -30,6 +30,12 @@
     <ClCompile Include="QueryForm.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="GameStartForm.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="GameForm.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainForm.h">
@@ -50,6 +56,12 @@
     <ClInclude Include="resource.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="GameStartForm.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="GameForm.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Practice.rc">
@@ -57,7 +69,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\OneDrive\Desktop\ПИ-01 Шевченко Курсовой проект\animal_toy_stuffedanimal_doll_cat_dog_2744.ico">
+    <Image Include="..\..\..\OneDrive\Desktop\ПИ-01 Шевченко Курсовой проект\icon1.ico">
       <Filter>Файлы ресурсов</Filter>
     </Image>
   </ItemGroup>

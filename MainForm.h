@@ -4,6 +4,7 @@
 #include "ExitForm.h"
 #include "AdminForm.h"
 #include "QueryForm.h"
+#include "GameStartForm.h"
 
 namespace Practice {
 
@@ -298,6 +299,7 @@ namespace Practice {
 			this->GameToolStripMenuItem->Name = L"GameToolStripMenuItem";
 			this->GameToolStripMenuItem->Size = System::Drawing::Size(78, 34);
 			this->GameToolStripMenuItem->Text = L"&Игра";
+			this->GameToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::GameToolStripMenuItem_Click);
 			// 
 			// InfoToolStripMenuItem
 			// 
@@ -462,7 +464,6 @@ namespace Practice {
 
 	//Запуск программы
 	private: System::Void MainForm_Load(System::Object^ sender, System::EventArgs^ e) {
-		this->Show();
 
 		//Открытие приветственной формы
 		HelloForm^ p = gcnew HelloForm();
@@ -486,6 +487,9 @@ namespace Practice {
 			if (this->EnterToolStripMenuItem->Visible)
 				MainForm_Load(sender, e);
 		}
+		//Запуск игры
+		else if (p->DialogResult == System::Windows::Forms::DialogResult::OK)
+			GameToolStripMenuItem_Click(sender, e);
 	}
 
 	//Закрытие формы
@@ -654,7 +658,6 @@ namespace Practice {
 				if (this->toolStripStatusLabel_filename->Text != L"Новый файл")
 					this->SaveToolStripMenuItem->Enabled = true;
 				this->CorrectToolStripMenuItem->Enabled = true;
-				//String^ a = this->dataGridView1->Rows[this->dataGridView1->Rows->Count - 1]->Cells[0]->ToString();
 				if (this->dataGridView1->Rows->Count > 1 || this->dataGridView1->Rows->Count == 1 && this->dataGridView1->Rows[this->dataGridView1->Rows->Count - 1]->Cells[0]->Value != nullptr)
 					this->DelAllRowsToolStripMenuItem->Enabled = true;
 				else {
@@ -985,6 +988,17 @@ namespace Practice {
 	private: System::Void QueryToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		QueryForm^ p = gcnew QueryForm(this->toolStripStatusLabel_filename->Text);
 		p->Show();
+	}
+
+	//Запуск игры
+	private: System::Void GameToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		if ((GameStartForm^)Application::OpenForms["GameStartForm"] == nullptr) {
+			GameStartForm^ p = gcnew GameStartForm();
+			p->Show();
+		}
+		else
+			Application::OpenForms["GameStartForm"]->Select();
+		this->WindowState = FormWindowState::Minimized;
 	}
 };
 }
