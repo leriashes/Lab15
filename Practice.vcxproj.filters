@@ -73,4 +73,7 @@
       <Filter>Файлы ресурсов</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\OneDrive\Desktop\world.txt" />
+  </ItemGroup>
 </Project>

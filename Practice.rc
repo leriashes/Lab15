@@ -54,6 +54,14 @@ END
 // remains consistent on all systems.
 IDI_ICON1               ICON                    "C:\\Users\\valer\\OneDrive\\Desktop\\ПИ-01 Шевченко Курсовой проект\\icon1.ico"
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// TXT
+//
+
+IDR_TXT1                TXT                     "C:\\Users\\valer\\OneDrive\\Desktop\\world.txt"
+
 #endif    // Русский (Россия) resources
 /////////////////////////////////////////////////////////////////////////////
 

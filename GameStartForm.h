@@ -93,7 +93,7 @@ namespace Practice {
 			// 
 			this->label1->BackColor = System::Drawing::Color::White;
 			this->label1->Dock = System::Windows::Forms::DockStyle::Top;
-			this->label1->Font = (gcnew System::Drawing::Font(L"Mistral", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->label1->Font = (gcnew System::Drawing::Font(L"Mistral", 36, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->label1->Location = System::Drawing::Point(0, 0);
 			this->label1->Name = L"label1";
@@ -224,8 +224,9 @@ namespace Practice {
 #pragma endregion
 	//Играть
 	private: System::Void button_play_Click(System::Object^ sender, System::EventArgs^ e) {
-		GameForm^ p = gcnew GameForm();
+		GameForm^ p = gcnew GameForm(this->radioButton_country->Checked);
 		p->Show();
+		this->Hide();
 	}
 	//Выход из игры
 	private: System::Void button_quit_Click(System::Object^ sender, System::EventArgs^ e) {
