@@ -113,7 +113,7 @@ namespace Practice {
 			this->button_exit->Location = System::Drawing::Point(70, 439);
 			this->button_exit->Name = L"button_exit";
 			this->button_exit->Size = System::Drawing::Size(301, 40);
-			this->button_exit->TabIndex = 3;
+			this->button_exit->TabIndex = 4;
 			this->button_exit->Text = L"Выход из программы";
 			this->button_exit->UseVisualStyleBackColor = false;
 			// 
@@ -136,7 +136,7 @@ namespace Practice {
 			this->button_game->Location = System::Drawing::Point(71, 334);
 			this->button_game->Name = L"button_game";
 			this->button_game->Size = System::Drawing::Size(300, 80);
-			this->button_game->TabIndex = 5;
+			this->button_game->TabIndex = 3;
 			this->button_game->Text = L"Игра \r\n\"Столицы государств\"";
 			this->button_game->UseVisualStyleBackColor = false;
 			// 

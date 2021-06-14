@@ -992,12 +992,14 @@ namespace Practice {
 
 	//Запуск игры
 	private: System::Void GameToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-		if ((GameStartForm^)Application::OpenForms["GameStartForm"] == nullptr) {
+		if (Application::OpenForms["GameStartForm"] == nullptr && Application::OpenForms["GameForm"] == nullptr) {
 			GameStartForm^ p = gcnew GameStartForm();
 			p->Show();
 		}
+		else if (Application::OpenForms["GameForm"] != nullptr)
+			Application::OpenForms["GameForm"]->Select();
 		else
-			Application::OpenForms["GameStartForm"]->Select();
+			Application::OpenForms["GameStartForm"]->Show();
 		this->WindowState = FormWindowState::Minimized;
 	}
 };
