@@ -509,7 +509,8 @@ namespace Practice {
 					else
 						SaveToolStripMenuItem_Click(sender, e);
 				}
-				e->Cancel = false;
+				if (!this->changes)
+					e->Cancel = false;
 			}
 		}
 		else {

@@ -78,6 +78,7 @@ namespace Practice {
 			this->textBox1->TabIndex = 1;
 			this->textBox1->UseSystemPasswordChar = true;
 			this->textBox1->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &AdminForm::textBox1_MouseClick);
+			this->textBox1->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &AdminForm::textBox1_KeyPress);
 			// 
 			// button_ready
 			// 
@@ -147,6 +148,12 @@ namespace Practice {
 	}
 	private: System::Void textBox1_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
 		this->label1->Visible = false;
+	}
+	private: System::Void textBox1_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
+		if (e->KeyChar == '\r') {
+			button_ready_Click(sender, e);
+			this->DialogResult = System::Windows::Forms::DialogResult::OK;
+		}
 	}
 };
 }

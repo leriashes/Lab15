@@ -388,21 +388,26 @@ namespace Practice {
 
 		gen_word();
 	}
+
 	private: System::Void QuitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->Close();
 		Application::OpenForms["MainForm"]->WindowState = FormWindowState::Maximized;
 	}
+
 	private: System::Void MainMenuToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		Application::OpenForms["GameStartForm"]->Show();
 		this->Close();
 	}
+	
 	private: System::Void textBox_country_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
 		textBox_capital_KeyPress(sender, e);
 	}
+	
 	private: System::Void textBox_capital_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
 		if (e->KeyChar == '\r')
 			button_OK_Click(sender, e);
 	}
+	
 	private: System::Void button_OK_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->label_message->Visible = true;
 

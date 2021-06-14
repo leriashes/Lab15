@@ -134,6 +134,8 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_ID;
 private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_number;
 private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_cost;
 private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
+private: System::Windows::Forms::Button^ button_clear;
+private: System::Windows::Forms::Button^ button_quit;
 
 
 
@@ -165,6 +167,8 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 			this->statusStrip1 = (gcnew System::Windows::Forms::StatusStrip());
 			this->toolStripStatusLabel_filename = (gcnew System::Windows::Forms::ToolStripStatusLabel());
 			this->panel_big = (gcnew System::Windows::Forms::Panel());
+			this->button_clear = (gcnew System::Windows::Forms::Button());
+			this->button_quit = (gcnew System::Windows::Forms::Button());
 			this->panel6 = (gcnew System::Windows::Forms::Panel());
 			this->textBox_cost = (gcnew System::Windows::Forms::TextBox());
 			this->checkBox_cost = (gcnew System::Windows::Forms::CheckBox());
@@ -238,6 +242,8 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 			// panel_big
 			// 
 			this->panel_big->BackColor = System::Drawing::Color::LightYellow;
+			this->panel_big->Controls->Add(this->button_clear);
+			this->panel_big->Controls->Add(this->button_quit);
 			this->panel_big->Controls->Add(this->panel6);
 			this->panel_big->Controls->Add(this->panel5);
 			this->panel_big->Controls->Add(this->panel4);
@@ -250,6 +256,28 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 			this->panel_big->Name = L"panel_big";
 			this->panel_big->Size = System::Drawing::Size(450, 1464);
 			this->panel_big->TabIndex = 1;
+			// 
+			// button_clear
+			// 
+			this->button_clear->BackColor = System::Drawing::Color::GhostWhite;
+			this->button_clear->Location = System::Drawing::Point(12, 1107);
+			this->button_clear->Name = L"button_clear";
+			this->button_clear->Size = System::Drawing::Size(425, 57);
+			this->button_clear->TabIndex = 22;
+			this->button_clear->Text = L"Очистка всех критериев";
+			this->button_clear->UseVisualStyleBackColor = false;
+			this->button_clear->Click += gcnew System::EventHandler(this, &QueryForm::button_clear_Click);
+			// 
+			// button_quit
+			// 
+			this->button_quit->BackColor = System::Drawing::Color::GhostWhite;
+			this->button_quit->Location = System::Drawing::Point(12, 1184);
+			this->button_quit->Name = L"button_quit";
+			this->button_quit->Size = System::Drawing::Size(425, 57);
+			this->button_quit->TabIndex = 21;
+			this->button_quit->Text = L"Выход";
+			this->button_quit->UseVisualStyleBackColor = false;
+			this->button_quit->Click += gcnew System::EventHandler(this, &QueryForm::button_quit_Click);
 			// 
 			// panel6
 			// 
@@ -1018,6 +1046,27 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column_age;
 
 		this->dataGridView1->Visible = good;
 		this->label_nothing->Visible = !good;
+	}
+	private: System::Void button_quit_Click(System::Object^ sender, System::EventArgs^ e) {
+		this->Close();
+	}
+	private: System::Void button_clear_Click(System::Object^ sender, System::EventArgs^ e) {
+		this->checkBox_name->Checked = false;
+		this->checkBox_id->Checked = false;
+		this->checkBox_number->Checked = false;
+		this->checkBox_cost->Checked = false;
+		this->checkBox_age->Checked = false;
+		this->radioButton_name_matches->Checked = true;
+		this->radioButton_id_matches->Checked = true;
+		this->radioButton_number_moeq->Checked = true;
+		this->radioButton_cost_moeq->Checked = true;
+		this->radioButton_age_moeq->Checked = true;
+		this->textBox_name->Text = "";
+		this->textBox_id->Text = "";
+		this->textBox_number->Text = "";
+		this->textBox_cost->Text = "";
+		this->textBox_age->Text = "";
+		button_search_Click(sender, e);
 	}
 };
 }
