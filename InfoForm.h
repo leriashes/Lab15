@@ -74,20 +74,25 @@ namespace Practice {
 			this->textBox1->Multiline = true;
 			this->textBox1->Name = L"textBox1";
 			this->textBox1->ReadOnly = true;
+			this->textBox1->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
 			this->textBox1->Size = System::Drawing::Size(584, 562);
 			this->textBox1->TabIndex = 1;
+			this->textBox1->Text = resources->GetString(L"textBox1.Text");
 			// 
 			// InfoForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(11, 24);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::Lavender;
-			this->ClientSize = System::Drawing::Size(617, 656);
+			this->ClientSize = System::Drawing::Size(617, 647);
 			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->button_close);
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->MaximizeBox = false;
+			this->MaximumSize = System::Drawing::Size(641, 711);
+			this->MinimumSize = System::Drawing::Size(641, 711);
 			this->Name = L"InfoForm";
+			this->SizeGripStyle = System::Windows::Forms::SizeGripStyle::Hide;
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Справка";
 			this->ResumeLayout(false);

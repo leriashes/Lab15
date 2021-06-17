@@ -80,7 +80,7 @@ namespace Practice {
 			this->label_hello->Name = L"label_hello";
 			this->label_hello->Size = System::Drawing::Size(430, 152);
 			this->label_hello->TabIndex = 0;
-			this->label_hello->Text = L"Добро пожаловать в программу учёта товаров для магазина игрушек!\r\n";
+			this->label_hello->Text = L"Добро пожаловать в TSB - программу учёта товаров для магазина игрушек!\r\n";
 			this->label_hello->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// button_open

@@ -131,7 +131,7 @@ namespace Practice {
 #pragma endregion
 	private: Boolean parol = false;
 	private: System::Void button_ready_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (this->textBox1->Text == "Igra")
+		if (this->textBox1->Text == "Igra1606")
 			parol = true;
 		else
 		{

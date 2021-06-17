@@ -164,7 +164,7 @@ namespace Practice {
 			});
 			this->menustrip_main->Location = System::Drawing::Point(0, 0);
 			this->menustrip_main->Name = L"menustrip_main";
-			this->menustrip_main->Size = System::Drawing::Size(1500, 38);
+			this->menustrip_main->Size = System::Drawing::Size(1500, 42);
 			this->menustrip_main->TabIndex = 0;
 			this->menustrip_main->Text = L"menuStrip1";
 			// 
@@ -176,7 +176,7 @@ namespace Practice {
 					this->SaveAsToolStripMenuItem, this->toolStripSeparator3, this->ExitToolStripMenuItem
 			});
 			this->FileToolStripMenuItem->Name = L"FileToolStripMenuItem";
-			this->FileToolStripMenuItem->Size = System::Drawing::Size(80, 34);
+			this->FileToolStripMenuItem->Size = System::Drawing::Size(80, 38);
 			this->FileToolStripMenuItem->Text = L"&Файл";
 			// 
 			// CreateToolStripMenuItem
@@ -249,7 +249,7 @@ namespace Practice {
 			this->EnterToolStripMenuItem->Alignment = System::Windows::Forms::ToolStripItemAlignment::Right;
 			this->EnterToolStripMenuItem->Name = L"EnterToolStripMenuItem";
 			this->EnterToolStripMenuItem->RightToLeft = System::Windows::Forms::RightToLeft::No;
-			this->EnterToolStripMenuItem->Size = System::Drawing::Size(330, 34);
+			this->EnterToolStripMenuItem->Size = System::Drawing::Size(330, 38);
 			this->EnterToolStripMenuItem->Text = L"Вход в режим администратора";
 			this->EnterToolStripMenuItem->TextAlign = System::Drawing::ContentAlignment::MiddleRight;
 			this->EnterToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::EnterToolStripMenuItem_Click);
@@ -262,7 +262,7 @@ namespace Practice {
 			});
 			this->CorrectToolStripMenuItem->Enabled = false;
 			this->CorrectToolStripMenuItem->Name = L"CorrectToolStripMenuItem";
-			this->CorrectToolStripMenuItem->Size = System::Drawing::Size(188, 34);
+			this->CorrectToolStripMenuItem->Size = System::Drawing::Size(188, 38);
 			this->CorrectToolStripMenuItem->Text = L"&Редактирование";
 			// 
 			// AddRowToolStripMenuItem
@@ -291,21 +291,21 @@ namespace Practice {
 			// 
 			this->QueryToolStripMenuItem->Enabled = false;
 			this->QueryToolStripMenuItem->Name = L"QueryToolStripMenuItem";
-			this->QueryToolStripMenuItem->Size = System::Drawing::Size(99, 34);
+			this->QueryToolStripMenuItem->Size = System::Drawing::Size(99, 38);
 			this->QueryToolStripMenuItem->Text = L"&Запрос";
 			this->QueryToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::QueryToolStripMenuItem_Click);
 			// 
 			// GameToolStripMenuItem
 			// 
 			this->GameToolStripMenuItem->Name = L"GameToolStripMenuItem";
-			this->GameToolStripMenuItem->Size = System::Drawing::Size(78, 34);
+			this->GameToolStripMenuItem->Size = System::Drawing::Size(78, 38);
 			this->GameToolStripMenuItem->Text = L"&Игра";
 			this->GameToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::GameToolStripMenuItem_Click);
 			// 
 			// InfoToolStripMenuItem
 			// 
 			this->InfoToolStripMenuItem->Name = L"InfoToolStripMenuItem";
-			this->InfoToolStripMenuItem->Size = System::Drawing::Size(111, 34);
+			this->InfoToolStripMenuItem->Size = System::Drawing::Size(111, 38);
 			this->InfoToolStripMenuItem->Text = L"&Справка";
 			this->InfoToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::InfoToolStripMenuItem_Click);
 			// 
@@ -358,12 +358,12 @@ namespace Practice {
 			});
 			this->dataGridView1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->dataGridView1->GridColor = System::Drawing::SystemColors::AppWorkspace;
-			this->dataGridView1->Location = System::Drawing::Point(0, 38);
+			this->dataGridView1->Location = System::Drawing::Point(0, 42);
 			this->dataGridView1->Name = L"dataGridView1";
 			this->dataGridView1->ReadOnly = true;
 			this->dataGridView1->RowHeadersWidthSizeMode = System::Windows::Forms::DataGridViewRowHeadersWidthSizeMode::AutoSizeToAllHeaders;
 			this->dataGridView1->RowTemplate->Height = 31;
-			this->dataGridView1->Size = System::Drawing::Size(1500, 876);
+			this->dataGridView1->Size = System::Drawing::Size(1500, 872);
 			this->dataGridView1->TabIndex = 2;
 			this->dataGridView1->Visible = false;
 			this->dataGridView1->CellValueChanged += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &MainForm::dataGridView1_CellValueChanged);
@@ -438,7 +438,7 @@ namespace Practice {
 			this->MinimumSize = System::Drawing::Size(1000, 125);
 			this->Name = L"MainForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-			this->Text = L"Магазин игрушек";
+			this->Text = L"TSB - Магазин игрушек";
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &MainForm::MainForm_FormClosing);
 			this->Load += gcnew System::EventHandler(this, &MainForm::MainForm_Load);
