@@ -1047,9 +1047,13 @@ private: System::Windows::Forms::Button^ button_quit;
 		this->dataGridView1->Visible = good;
 		this->label_nothing->Visible = !good;
 	}
+
+	//Закрытие формы
 	private: System::Void button_quit_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->Close();
 	}
+
+	//Очистка всех критериев
 	private: System::Void button_clear_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->checkBox_name->Checked = false;
 		this->checkBox_id->Checked = false;

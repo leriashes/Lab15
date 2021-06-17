@@ -324,6 +324,7 @@ namespace Practice {
 			Int32 index;
 			Boolean first_mode;
 
+	//Генерация слова
 	private: Void gen_word() {
 		do
 		{
@@ -337,6 +338,7 @@ namespace Practice {
 			this->label_capital->Text = this->capitals[this->index];
 	}
 
+	//Загрузка формы
 	private: System::Void GameForm_Load(System::Object^ sender, System::EventArgs^ e) {
 		if (this->first_mode) {
 			this->label1->ForeColor = System::Drawing::Color::DarkGreen;
@@ -389,33 +391,39 @@ namespace Practice {
 		gen_word();
 	}
 
+	//Выход из игры
 	private: System::Void QuitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->Close();
 		Application::OpenForms["MainForm"]->WindowState = FormWindowState::Maximized;
 	}
 
+	//Выход в главное меню игры
 	private: System::Void MainMenuToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		Application::OpenForms["GameStartForm"]->Show();
 		this->Close();
 	}
 	
+	//Нажата клавиша Enter
 	private: System::Void textBox_country_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
 		textBox_capital_KeyPress(sender, e);
 	}
-	
 	private: System::Void textBox_capital_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
 		if (e->KeyChar == '\r')
 			button_OK_Click(sender, e);
 	}
 	
+	//Нажата кнопка ОК
 	private: System::Void button_OK_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->label_message->Visible = true;
 
+		//Ответ верный
 		if (this->first_mode && this->textBox_capital->Text == this->capitals[this->index] || !this->first_mode && this->textBox_country->Text == this->countries[this->index]) {
 			this->score += 1;
 			this->label_message->Text = L"Верно!";
 			this->label_message->ForeColor = System::Drawing::Color::DarkGreen;
 		}
+
+		//Ответ неверный
 		else {
 			this->mistakes += 1;
 			String^ word;
@@ -437,6 +445,8 @@ namespace Practice {
 
 		if (this->mistakes != 3 && this->score + this->mistakes != 192)
 			gen_word();
+
+		//Конец игры
 		else {
 			if (this->mistakes == 3)
 				MessageBox::Show(L"Конец игры! Вы допустили максимальное количество ошибок.", "", MessageBoxButtons::OK);

@@ -531,7 +531,9 @@ namespace Practice {
 
 	//Создание файла
 	private: System::Void CreateToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Если открыт файл в режиме администратора с несохранёнными изменениями
 		if (this->QuitToolStripMenuItem->Visible && this->toolStripStatusLabel_filename->Visible && this->changes && MessageBox::Show(L"Сохранить изменения?", "", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes) {
+			//Сохранение изменений
 			if (this->toolStripStatusLabel_filename->Text == L"Новый файл")
 				SaveAsToolStripMenuItem_Click(sender, e);
 			else
@@ -551,6 +553,7 @@ namespace Practice {
 
 	//Открытие файла
 	private: System::Void OpenToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Если открыт файл в режиме администратора с несохранёнными изменениями
 		if (this->QuitToolStripMenuItem->Visible && this->toolStripStatusLabel_filename->Visible && this->changes && MessageBox::Show(L"Сохранить изменения?", "", MessageBoxButtons::YesNo) == System::Windows::Forms::DialogResult::Yes) {
 			if (this->toolStripStatusLabel_filename->Text == L"Новый файл")
 				SaveAsToolStripMenuItem_Click(sender, e);
@@ -660,6 +663,8 @@ namespace Practice {
 				this->SaveAsToolStripMenuItem->Enabled = true;
 				if (this->toolStripStatusLabel_filename->Text != L"Новый файл")
 					this->SaveToolStripMenuItem->Enabled = true;
+				else
+					this->SaveToolStripMenuItem->Enabled = false;
 				this->CorrectToolStripMenuItem->Enabled = true;
 				if (this->dataGridView1->Rows->Count > 1 || this->dataGridView1->Rows->Count == 1 && this->dataGridView1->Rows[this->dataGridView1->Rows->Count - 1]->Cells[0]->Value != nullptr)
 					this->DelAllRowsToolStripMenuItem->Enabled = true;
@@ -711,6 +716,7 @@ namespace Practice {
 			p->ShowDialog();
 
 		if (!this->toolStripStatusLabel_filename->Visible || !this->changes || p->DialogResult == System::Windows::Forms::DialogResult::No || p->DialogResult == System::Windows::Forms::DialogResult::Yes) {
+			//Сохранение изменений
 			if (p->DialogResult == System::Windows::Forms::DialogResult::Yes) {
 				if (this->toolStripStatusLabel_filename->Visible) {
 					if (this->toolStripStatusLabel_filename->Text == L"Новый файл")
@@ -740,6 +746,8 @@ namespace Practice {
 	//Сортировка в столбцах
 	private: System::Void dataGridView1_SortCompare(System::Object^ sender, System::Windows::Forms::DataGridViewSortCompareEventArgs^ e) {
 		if (e->CellValue1 != nullptr && e->CellValue2 != nullptr) {
+
+			//Сортировка по столбцу Количество
 			if (e->Column->Name == "Column_number") {
 				Int64 v1, v2;
 				v1 = Convert::ToInt64(e->CellValue1);
@@ -751,6 +759,8 @@ namespace Practice {
 				else
 					e->SortResult = 0;
 			}
+
+			//Сортировка по столбцу Цена
 			else if (e->Column->Name == "Column_cost") {
 				Double v1, v2;
 				v1 = Convert::ToDouble(e->CellValue1);
@@ -762,6 +772,8 @@ namespace Practice {
 				else
 					e->SortResult = 0;
 			}
+
+			//Сортировка по столбцу Возраст
 			else if (e->Column->Name == "Column_age") {
 				Int32 v1, v2;
 				String^ va1, ^ va2;
@@ -778,10 +790,14 @@ namespace Practice {
 				else
 					e->SortResult = 0;
 			}
+
+			//Сортировка по остальным столбцам
 			else
 				e->SortResult = System::String::Compare(
 					e->CellValue1->ToString(), e->CellValue2->ToString());
 		}
+
+		//Если сортируемые ячейки пусты
 		else {
 			if (e->CellValue1 == nullptr) {
 				if (e->CellValue2 == nullptr)
@@ -857,15 +873,19 @@ namespace Practice {
 		if (e->RowIndex != -1) {
 			this->changes = true;
 
+			//Если ячейка не пустая
 			if (this->dataGridView1->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value != nullptr) {
 				value = this->dataGridView1->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
 				if (value->Length > 0) {
+
 					if (e->ColumnIndex != 1)
 						good = check_value(value, e->ColumnIndex);
 					else
 						good = check_value(value, this->dataGridView1->Rows[e->RowIndex]->Cells[0]->Value->ToString(), e->RowIndex, this->dataGridView1);
 
 					switch (e->ColumnIndex) {
+
+					//Ячейка столбца Название игрушки
 					case 0:
 						if (good) {
 							Char symb = value[0];
@@ -878,6 +898,8 @@ namespace Practice {
 							this->dataGridView1->Rows[e->RowIndex]->Cells[1]->Value = symb + "-0001";
 						}
 						break;
+
+					//Ячейка столбца Инвентарный номер
 					case 1:
 						if (!good) {
 							String^ num = "";
@@ -890,14 +912,20 @@ namespace Practice {
 							this->dataGridView1->Rows[e->RowIndex]->Cells[1]->Value = Convert::ToString(num);
 						}
 						break;
+
+					//Ячейка столбца Количество
 					case 2:
 						if (good)
 							this->dataGridView1->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = Convert::ToString(Convert::ToInt64(value));
 						break;
+
+					//Ячейка столбца Цена
 					case 3:
 						if (good)
 							this->dataGridView1->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = value_format(value, 3);
 						break;
+
+					//Ячейка столбца Возраст
 					case 4:
 						if (good)
 							this->dataGridView1->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = value_format(value, 4);
@@ -999,10 +1027,13 @@ namespace Practice {
 			GameStartForm^ p = gcnew GameStartForm();
 			p->Show();
 		}
+
+		//Если игра уже запущена
 		else if (Application::OpenForms["GameForm"] != nullptr)
 			Application::OpenForms["GameForm"]->Select();
 		else
 			Application::OpenForms["GameStartForm"]->Show();
+
 		this->WindowState = FormWindowState::Minimized;
 	}
 
@@ -1012,6 +1043,8 @@ namespace Practice {
 			InfoForm^ p = gcnew InfoForm();
 			p->Show();
 		}
+
+		//Если окно со справкой уже открыто
 		else
 			Application::OpenForms["InfoForm"]->Select();
 	}

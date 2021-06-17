@@ -232,6 +232,8 @@ namespace Practice {
 	private: System::Void button_quit_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->Close();
 	}
+
+	//Закрытие формы
 	private: System::Void GameStartForm_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
 		Application::OpenForms["MainForm"]->WindowState = FormWindowState::Maximized;
 	}

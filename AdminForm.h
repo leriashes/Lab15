@@ -130,9 +130,15 @@ namespace Practice {
 		}
 #pragma endregion
 	private: Boolean parol = false;
+
+	//Нажата кнопка Готово
 	private: System::Void button_ready_Click(System::Object^ sender, System::EventArgs^ e) {
+
+		//Пароль верный
 		if (this->textBox1->Text == "Igra1606")
 			parol = true;
+
+		//Пароль неверный
 		else
 		{
 			parol = false; 
@@ -140,15 +146,21 @@ namespace Practice {
 			this->textBox1->Text = "";
 		}
 	}
+
+	//Закрытие формы
 	private: System::Void AdminForm_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
 		e->Cancel = true;
 		
 		if (parol == true || e->CloseReason == CloseReason::UserClosing)
 			e->Cancel = false;
 	}
+
+	//Начало ввода пароля
 	private: System::Void textBox1_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
 		this->label1->Visible = false;
 	}
+
+	//Нажатие клавиши Enter
 	private: System::Void textBox1_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
 		if (e->KeyChar == '\r') {
 			button_ready_Click(sender, e);
