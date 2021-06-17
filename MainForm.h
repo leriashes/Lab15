@@ -5,6 +5,7 @@
 #include "AdminForm.h"
 #include "QueryForm.h"
 #include "GameStartForm.h"
+#include "InfoForm.h"
 
 namespace Practice {
 
@@ -306,6 +307,7 @@ namespace Practice {
 			this->InfoToolStripMenuItem->Name = L"InfoToolStripMenuItem";
 			this->InfoToolStripMenuItem->Size = System::Drawing::Size(111, 34);
 			this->InfoToolStripMenuItem->Text = L"&Справка";
+			this->InfoToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::InfoToolStripMenuItem_Click);
 			// 
 			// QuitToolStripMenuItem
 			// 
@@ -1002,6 +1004,16 @@ namespace Practice {
 		else
 			Application::OpenForms["GameStartForm"]->Show();
 		this->WindowState = FormWindowState::Minimized;
+	}
+
+	//Открытие справки
+	private: System::Void InfoToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (Application::OpenForms["InfoForm"] == nullptr) {
+			InfoForm^ p = gcnew InfoForm();
+			p->Show();
+		}
+		else
+			Application::OpenForms["InfoForm"]->Select();
 	}
 };
 }

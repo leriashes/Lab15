@@ -123,6 +123,7 @@
     <ClCompile Include="GameForm.cpp" />
     <ClCompile Include="GameStartForm.cpp" />
     <ClCompile Include="HelloForm.cpp" />
+    <ClCompile Include="InfoForm.cpp" />
     <ClCompile Include="MainForm.cpp" />
     <ClCompile Include="QueryForm.cpp" />
   </ItemGroup>
@@ -140,6 +141,9 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="HelloForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="InfoForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="MainForm.h">
@@ -165,6 +169,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="HelloForm.resx">
       <DependentUpon>HelloForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InfoForm.resx">
+      <DependentUpon>InfoForm.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.h</DependentUpon>
